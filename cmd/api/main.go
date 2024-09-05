@@ -9,7 +9,9 @@ import (
 
 func main() {
 	router := gin.Default()
-	router.SetTrustedProxies(nil)
+	if err := router.SetTrustedProxies(nil); err != nil {
+		log.Fatalln(err)
+	}
 
 	healthcheckHandler := api.NewHealtcheckHandler()
 	router.GET("/health", healthcheckHandler.HealthCheck)
