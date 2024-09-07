@@ -1,0 +1,20 @@
+name: Publish image to Docker Hub
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  publish_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: |
+          docker build . -t ${{secrets.DOCKERHUB_USERNAME}}/software2backend:latest
+      - name: publish
+        run: |
+          docker push ${{secrets.DOCKERHUB_USERNAME}}/software2backend:latest
