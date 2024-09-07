@@ -39,15 +39,15 @@ func New() *Config {
 
 	cfg := &Config{}
 
-	cfg.Server.Host = os.Getenv("server.host")
-	cfg.Server.Port, _ = strconv.Atoi(os.Getenv("server.host"))
-	cfg.Server.ReadTimeout, _ = strconv.Atoi(os.Getenv("server.read_timeout"))
-	cfg.Server.WriteTimeout, _ = strconv.Atoi(os.Getenv("server.write_timeout"))
+	cfg.Server.Host = os.Getenv("SERVER_HOST")
+	cfg.Server.Port, _ = strconv.Atoi(os.Getenv("SERVER_PORT"))
+	cfg.Server.ReadTimeout, _ = strconv.Atoi(os.Getenv("SERVER_READ_TIMEOUT"))
+	cfg.Server.WriteTimeout, _ = strconv.Atoi(os.Getenv("SERVER_WRITE_TIMEOUT"))
 
-	cfg.Database.Host = os.Getenv("database.host")
-	cfg.Database.DBName = os.Getenv("database.dbname")
-	cfg.Database.User = os.Getenv("database.user")
-	cfg.Database.Password = os.Getenv("database.password")
+	cfg.Database.Host = os.Getenv("DATABASE_HOST")
+	cfg.Database.DBName = os.Getenv("DATABASE_DBNAME")
+	cfg.Database.User = os.Getenv("DATABASE_USER")
+	cfg.Database.Password = os.Getenv("DATABASE_PASSWORD")
 
 	return cfg
 }
