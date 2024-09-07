@@ -2,8 +2,11 @@ package config
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strconv"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 )
 
 type ServerConfig struct {
@@ -29,19 +32,22 @@ type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
 }
 
-func New(path string) (*Config, error) {
-	var cfg Config
-	viper.AddConfigPath(path)
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-
-	viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+func New() *Config {
+	if err := godotenv.Load(); err != nil {
+		log.Printf("error loading .env file: %v\n", err)
 	}
-	if err := viper.Unmarshal(&cfg); err != nil {
-		return nil, err
-	}
-	return &cfg, nil
+
+	cfg := &Config{}
+
+	cfg.Server.Host = os.Getenv("server.host")
+	cfg.Server.Port, _ = strconv.Atoi(os.Getenv("server.host"))
+	cfg.Server.ReadTimeout, _ = strconv.Atoi(os.Getenv("server.read_timeout"))
+	cfg.Server.WriteTimeout, _ = strconv.Atoi(os.Getenv("server.write_timeout"))
+
+	cfg.Database.Host = os.Getenv("database.host")
+	cfg.Database.DBName = os.Getenv("database.dbname")
+	cfg.Database.User = os.Getenv("database.user")
+	cfg.Database.Password = os.Getenv("database.password")
+
+	return cfg
 }

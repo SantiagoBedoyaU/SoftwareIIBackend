@@ -16,10 +16,7 @@ import (
 )
 
 func main() {
-	config, err := config.New(".")
-	if err != nil {
-		log.Fatalln(err)
-	}
+	config := config.New()
 
 	ctx := context.Background()
 	dbconn, err := mongodb.NewMongodbConnection(ctx, config.Database)
