@@ -39,7 +39,7 @@ func main() {
 	userHandler := api.NewUserHandler(userService)
 
 	// routes
-	router.GET("/", healthcheckHandler.HealthCheck)
+	router.GET("/health", healthcheckHandler.HealthCheck)
 	v1 := router.Group("/api/v1")
 	{
 		user := v1.Group("/users")
