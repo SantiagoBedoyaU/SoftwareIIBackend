@@ -8,5 +8,5 @@ RUN go build -o ./software2backend ./cmd/api/main.go
 FROM alpine:latest AS runner
 WORKDIR /app
 COPY --from=builder /app/software2backend .
-EXPOSE 8080
+EXPOSE 8000
 ENTRYPOINT ["./software2backend"]
