@@ -1,5 +1,0 @@
-[server]
-host=localhost
-port=8000
-read_timeout=10
-write_timeout=10

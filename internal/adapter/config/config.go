@@ -17,15 +17,25 @@ func (s ServerConfig) Addr() string {
 	return fmt.Sprintf("%s:%d", s.Host, s.Port)
 }
 
-type Config struct {
-	Server ServerConfig `mapstructure:"server"`
+type DatabaseConfig struct {
+	Host     string `mapstructure:"host"`
+	DBName   string `mapstructure:"dbname"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
 }
 
-func New() (*Config, error) {
+type Config struct {
+	Server   ServerConfig   `mapstructure:"server"`
+	Database DatabaseConfig `mapstructure:"database"`
+}
+
+func New(path string) (*Config, error) {
 	var cfg Config
-	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
+	viper.AddConfigPath(path)
+	viper.SetConfigName(".env")
+	viper.SetConfigType("env")
+
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
