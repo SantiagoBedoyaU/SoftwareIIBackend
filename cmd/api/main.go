@@ -57,10 +57,10 @@ func main() {
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	go func() {
+		log.Printf("Server is running on port %v", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil {
 			log.Fatalln(err)
 		}
-		log.Printf("Server is running on port %v", srv.Addr)
 	}()
 
 	<-ctx.Done()
