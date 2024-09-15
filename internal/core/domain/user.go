@@ -1,28 +1,28 @@
 package domain
 
-type Role int
+type UserRole int
 
 const (
-	Admin Role = iota
-	Medic
-	Patient
+	AdminRole UserRole = iota
+	MedicRole
+	PatientRole
 )
 
-type TypeDNI int
+type UserTypeDNI int
 
 const (
-	CC TypeDNI = iota
-	TI
-	TP // passport
+	TypeDniCC UserTypeDNI = iota
+	TypeDniTI
+	TypeDniTP // passport
 )
 
 type User struct {
-	ID        string  `json:"id"`
-	TypeDNI   TypeDNI `json:"type_dni"`
-	DNI       string  `json:"dni"`
-	FirstName string  `json:"first_name"`
-	LastName  string  `json:"last_name"`
-	Email     string  `json:"email"`
-	Password  string  `json:"password"`
-	Role      Role    `json:"role"`
+	ID        string      `json:"id" bson:"_id,omitempty"`
+	TypeDNI   UserTypeDNI `json:"type_dni" bson:"type_dni"`
+	DNI       string      `json:"dni" bson:"dni"`
+	FirstName string      `json:"first_name" bson:"first_name"`
+	LastName  string      `json:"last_name" bson:"last_name"`
+	Email     string      `json:"email" bson:"email"`
+	Password  string      `json:"password" bson:"password"`
+	Role      UserRole    `json:"role" bson:"role"`
 }
