@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"softwareIIbackend/internal/adapter/config"
 	"softwareIIbackend/internal/adapter/handler/api"
+	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
 	"softwareIIbackend/internal/core/service"
 	"syscall"
@@ -38,14 +39,21 @@ func main() {
 	userService := service.NewUserService(userRepo)
 	userHandler := api.NewUserHandler(userService)
 
+	// auth
+	authService := service.NewAuthService()
+	authHandler := api.NewAuthHandler(authService, userService)
+
 	// routes
 	router.GET("/health", healthcheckHandler.HealthCheck)
 	v1 := router.Group("/api/v1")
 	{
-		user := v1.Group("/users")
+		v1.POST("/sign-in", authHandler.SignIn)
+
+		user := v1.Group("/users", middleware.AuthMiddleware())
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
 		}
+
 	}
 
 	srv := http.Server{
