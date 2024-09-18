@@ -10,10 +10,10 @@ import (
 )
 
 type ServerConfig struct {
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	ReadTimeout  int    `mapstructure:"read_timeout"`
-	WriteTimeout int    `mapstructure:"write_timeout"`
+	Host         string
+	Port         int
+	ReadTimeout  int
+	WriteTimeout int
 }
 
 func (s ServerConfig) Addr() string {
@@ -21,15 +21,25 @@ func (s ServerConfig) Addr() string {
 }
 
 type DatabaseConfig struct {
-	Host     string `mapstructure:"host"`
-	DBName   string `mapstructure:"dbname"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
+	Host     string
+	DBName   string
+	User     string
+	Password string
+}
+
+type AuthConfig struct {
+	JwtSecret string
+}
+
+type NotificationConfig struct {
+	MailerSendAPIToken string
 }
 
 type Config struct {
-	Server   ServerConfig   `mapstructure:"server"`
-	Database DatabaseConfig `mapstructure:"database"`
+	Server       ServerConfig
+	Database     DatabaseConfig
+	Auth         AuthConfig
+	Notification NotificationConfig
 }
 
 func New() *Config {
@@ -48,6 +58,10 @@ func New() *Config {
 	cfg.Database.DBName = os.Getenv("DATABASE_DBNAME")
 	cfg.Database.User = os.Getenv("DATABASE_USER")
 	cfg.Database.Password = os.Getenv("DATABASE_PASSWORD")
+
+	cfg.Auth.JwtSecret = os.Getenv("JWT_SECRET")
+
+	cfg.Notification.MailerSendAPIToken = os.Getenv("MAILER_SEND_API_TOKEN")
 
 	return cfg
 }

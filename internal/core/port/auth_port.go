@@ -1,7 +1,11 @@
 package port
 
-import "softwareIIbackend/internal/core/domain"
+import (
+	"context"
+	"softwareIIbackend/internal/core/domain"
+)
 
 type AuthService interface {
-	GetAuthToken(dni string, role domain.UserRole) (string, error)
+	GetAuthToken(ctx context.Context, dni string, role domain.UserRole) (string, error)
+	RecoverPassword(ctx context.Context, fullname, email string) error
 }
