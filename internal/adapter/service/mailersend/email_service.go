@@ -46,14 +46,11 @@ func (s *EmailService) sendEmail(ctx context.Context, fullname, email, subject, 
 	return err
 }
 
-func (s *EmailService) SendRecoverPasswordEmail(ctx context.Context, fullname, email string) error {
+func (s *EmailService) SendRecoverPasswordEmail(ctx context.Context, fullname, email, token string) error {
 	subject := "Password Recovery"
 
-	url := fmt.Sprintf("http://localhost:8000/password-reset?at=%s", "testing")
-	text := fmt.Sprintf(`
-		Hey, %s!
-		Your password recovery link is: %s
-	`, fullname, url)
+	url := fmt.Sprintf("http://localhost:8000/password-reset?at=%s", token)
+	text := fmt.Sprintf("Hey, %s. Your password recovery link is: %s", fullname, url)
 
 	return s.sendEmail(ctx, fullname, email, subject, text)
 }

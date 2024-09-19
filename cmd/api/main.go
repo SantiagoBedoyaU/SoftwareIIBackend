@@ -53,8 +53,9 @@ func main() {
 	{
 		v1.POST("/sign-in", authHandler.SignIn)
 		v1.POST("/recover-password", authHandler.RecoverPassword)
+		v1.POST("/reset-password", authHandler.ResetPassword)
 
-		user := v1.Group("/users", middleware.AuthMiddleware(&config.Auth))
+		user := v1.Group("/users", middleware.AuthMiddleware(authService))
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
 		}

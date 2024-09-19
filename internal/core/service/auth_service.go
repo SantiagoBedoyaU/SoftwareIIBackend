@@ -17,6 +17,7 @@ type AuthService struct {
 
 func NewAuthService(cfg *config.AuthConfig, emailService port.EmailService) *AuthService {
 	return &AuthService{
+		cfg:          cfg,
 		emailService: emailService,
 	}
 }
@@ -32,5 +33,21 @@ func (s *AuthService) GetAuthToken(ctx context.Context, dni string, role domain.
 }
 
 func (s *AuthService) RecoverPassword(ctx context.Context, fullname, email string) error {
-	return s.emailService.SendRecoverPasswordEmail(ctx, fullname, email)
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"exp": time.Now().Add(20 * time.Minute).Unix(),
+		"sub": email,
+	})
+
+	token, err := claims.SignedString([]byte(s.cfg.JwtSecret))
+	if err != nil {
+		return err
+	}
+	return s.emailService.SendRecoverPasswordEmail(ctx, fullname, email, token)
+}
+
+func (s *AuthService) VerifyAccessToken(ctx context.Context, accessToken string, claims *jwt.MapClaims) error {
+	_, err := jwt.ParseWithClaims(accessToken, claims, func(t *jwt.Token) (interface{}, error) {
+		return []byte(s.cfg.JwtSecret), nil
+	})
+	return err
 }

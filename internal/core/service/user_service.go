@@ -17,7 +17,3 @@ func NewUserService(repo port.UserRepository) *UserService {
 func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
 	return s.repo.GetUser(ctx, DNI)
 }
-
-func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	return s.repo.GetUserByEmail(ctx, email)
-}

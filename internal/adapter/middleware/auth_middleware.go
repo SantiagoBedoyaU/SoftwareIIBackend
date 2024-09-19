@@ -1,15 +1,14 @@
 package middleware
 
 import (
-	"log"
-	"softwareIIbackend/internal/adapter/config"
+	"softwareIIbackend/internal/core/port"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 // generate jwt auth middleware for gin
-func AuthMiddleware(cfg *config.AuthConfig) gin.HandlerFunc {
+func AuthMiddleware(authService port.AuthService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		jwtToken := c.GetHeader("authorization")
 		if jwtToken == "" {
@@ -19,12 +18,7 @@ func AuthMiddleware(cfg *config.AuthConfig) gin.HandlerFunc {
 
 		// validate jwt token
 		claims := jwt.MapClaims{}
-		_, err := jwt.ParseWithClaims(jwtToken, &claims, func(t *jwt.Token) (interface{}, error) {
-			return []byte(cfg.JwtSecret), nil
-		})
-
-		if err != nil {
-			log.Println(err)
+		if err := authService.VerifyAccessToken(c, jwtToken, &claims); err != nil {
 			c.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
 			return
 		}

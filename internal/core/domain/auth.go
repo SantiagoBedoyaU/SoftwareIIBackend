@@ -6,5 +6,10 @@ type Auth struct {
 }
 
 type RecoverPassword struct {
-	Email string `json:"email"`
+	DNI string `json:"dni"`
+}
+
+type ResetPassword struct {
+	Password    string `json:"password"`
+	AccessToken string `json:"access_token"`
 }

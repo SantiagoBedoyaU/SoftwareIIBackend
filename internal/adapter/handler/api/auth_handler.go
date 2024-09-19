@@ -9,6 +9,7 @@ import (
 	"softwareIIbackend/internal/core/port"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -74,17 +75,18 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetUserByEmail(ctx, req.Email)
+	user, err := h.userService.GetUser(ctx, req.DNI)
 	if err != nil {
 		if errors.Is(err, repository.UserNotFoundErr) {
 			ctx.JSON(http.StatusNotFound, gin.H{
-				"message": "User not found with this email",
+				"message": "User not found",
 			})
 			return
 		}
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
 		})
+		return
 	}
 
 	fullname := fmt.Sprintf("%s %s", user.FirstName, user.LastName)
@@ -97,5 +99,30 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Password recovery email sent",
+	})
+}
+
+func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
+	var req domain.ResetPassword
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	claims := jwt.MapClaims{}
+	err := h.authService.VerifyAccessToken(ctx, req.AccessToken, &claims)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Invalid access token",
+		})
+		return
+	}
+
+	// call user.service to update password
+	fmt.Println("Updating password for user", claims["sub"])
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Password updated successfully",
 	})
 }
