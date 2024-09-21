@@ -3,6 +3,7 @@ package middleware
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -11,7 +12,8 @@ import (
 // generate jwt auth middleware for gin
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		jwtToken := c.GetHeader("authorization")
+		bearerToken := c.GetHeader("authorization")
+		jwtToken := strings.Split(bearerToken, "Bearer ")[1]
 		if jwtToken == "" {
 			c.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
 			return

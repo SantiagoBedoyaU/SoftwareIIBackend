@@ -3,7 +3,6 @@ package api
 import (
 	"errors"
 	"net/http"
-	"softwareIIbackend/internal/adapter/repository"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
 
@@ -33,7 +32,7 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 	}
 	user, err := h.userService.GetUser(ctx, req.DNI)
 	if err != nil {
-		if errors.Is(err, repository.UserNotFoundErr) {
+		if errors.Is(err, domain.UserNotFoundErr) {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"message": "DNI or Password incorrect",
 			})

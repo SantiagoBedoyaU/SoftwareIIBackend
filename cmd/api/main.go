@@ -52,6 +52,8 @@ func main() {
 		user := v1.Group("/users", middleware.AuthMiddleware())
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
+			user.POST("/", userHandler.CreateUser)
+			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 		}
 
 	}
