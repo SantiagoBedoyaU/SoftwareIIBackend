@@ -4,6 +4,8 @@ import (
 	"context"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -16,4 +18,14 @@ func NewUserService(repo port.UserRepository) *UserService {
 
 func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
 	return s.repo.GetUser(ctx, DNI)
+}
+
+func (s *UserService) UpdatePassword(ctx context.Context, newPassword string) error {
+	dni := ctx.Value("userDNI")
+	user, err := s.repo.GetUser(ctx, dni.(string))
+	if err != nil {
+		return err
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost) 
+	
 }
