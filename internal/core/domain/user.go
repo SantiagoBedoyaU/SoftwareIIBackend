@@ -26,3 +26,7 @@ type User struct {
 	Password  string      `json:"password" bson:"password"`
 	Role      UserRole    `json:"role" bson:"role"`
 }
+
+type UpdatePassword struct {
+	NewPassword string `json:"new_password"`
+}

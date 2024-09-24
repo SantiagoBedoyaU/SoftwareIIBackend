@@ -45,6 +45,7 @@ func main() {
 
 	// routes
 	router.GET("/health", healthcheckHandler.HealthCheck)
+
 	v1 := router.Group("/api/v1")
 	{
 		v1.POST("/sign-in", authHandler.SignIn)
@@ -52,6 +53,7 @@ func main() {
 		user := v1.Group("/users", middleware.AuthMiddleware())
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
+			user.POST("/reset-password", userHandler.ResetPassword)
 		}
 
 	}
