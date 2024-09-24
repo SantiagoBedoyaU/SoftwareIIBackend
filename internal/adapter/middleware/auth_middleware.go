@@ -9,21 +9,21 @@ import (
 
 // generate jwt auth middleware for gin
 func AuthMiddleware(authService port.AuthService) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		jwtToken := c.GetHeader("authorization")
+	return func(ctx *gin.Context) {
+		jwtToken := ctx.GetHeader("authorization")
 		if jwtToken == "" {
-			c.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
+			ctx.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
 			return
 		}
 
 		// validate jwt token
 		claims := jwt.MapClaims{}
-		if err := authService.VerifyAccessToken(c, jwtToken, &claims); err != nil {
-			c.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
+		if err := authService.VerifyAccessToken(ctx, jwtToken, &claims); err != nil {
+			ctx.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
 			return
 		}
 
-		c.Set("userDNI", claims["sub"])
-		c.Set("userRole", claims["role"])
+		ctx.Set("userDNI", claims["sub"])
+		ctx.Set("userRole", claims["role"])
 	}
 }
