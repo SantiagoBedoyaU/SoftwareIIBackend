@@ -12,4 +12,5 @@ type UserService interface {
 
 type UserRepository interface {
 	GetUser(ctx context.Context, DNI string) (*domain.User, error)
+	UpdateUser(ctx context.Context, user *domain.User) error
 }

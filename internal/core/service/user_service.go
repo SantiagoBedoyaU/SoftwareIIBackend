@@ -27,5 +27,13 @@ func (s *UserService) UpdatePassword(ctx context.Context, newPassword string) er
 		return err
 	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost) 
-	
+	if err != nil {
+		return err
+	}
+	user.Password = string(hashedPassword)
+	err = s.repo.UpdateUser(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
