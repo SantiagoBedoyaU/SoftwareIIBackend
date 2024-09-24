@@ -31,7 +31,7 @@ func (s *UserService) UpdatePassword(ctx context.Context, newPassword string) er
 		return err
 	}
 	user.Password = string(hashedPassword)
-	err = s.repo.UpdateUser(ctx, user)
+	err = s.repo.UpdateUserPassword(ctx, user)
 	if err != nil {
 		return err
 	}
