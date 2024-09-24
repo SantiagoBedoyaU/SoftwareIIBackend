@@ -40,7 +40,7 @@ func (h *UserHandler) ResetPassword(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err = h.svc.UpdatePassword(ctx, req.NewPassword)
+	err = h.svc.UpdateUserPassword(ctx, req.NewPassword)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),

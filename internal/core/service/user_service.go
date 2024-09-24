@@ -20,7 +20,7 @@ func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, er
 	return s.repo.GetUser(ctx, DNI)
 }
 
-func (s *UserService) UpdatePassword(ctx context.Context, newPassword string) error {
+func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string) error {
 	dni := ctx.Value("userDNI")
 	user, err := s.repo.GetUser(ctx, dni.(string))
 	if err != nil {

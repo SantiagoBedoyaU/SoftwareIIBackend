@@ -7,7 +7,7 @@ import (
 
 type UserService interface {
 	GetUser(ctx context.Context, DNI string) (*domain.User, error)
-	UpdatePassword(ctx context.Context, newPassword string) error
+	UpdateUserPassword(ctx context.Context, newPassword string) error
 }
 
 type UserRepository interface {
