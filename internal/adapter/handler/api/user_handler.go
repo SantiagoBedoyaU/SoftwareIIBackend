@@ -54,7 +54,6 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 }
 
 func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
-	// var data []domain.User
 	multipartFile, err := ctx.FormFile("file")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

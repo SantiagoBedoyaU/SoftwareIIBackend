@@ -41,10 +41,15 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 		return domain.AdminRoleNotAllowedErr
 	}
 
-	password := s.generatePassword(ctx)
+	password := s.generatePassword()
 	// TODO: sent an email with the user password
 	log.Println("Password", password)
 
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(hash)
 	return s.repo.CreateUser(ctx, user)
 }
 
@@ -60,21 +65,14 @@ func (s *UserService) LoadUserByCSV(ctx context.Context, users []*domain.User) e
 	return err
 }
 
-func (s *UserService) generatePassword(ctx context.Context) string {
-	// Generate a cryptographically secure random number
+func (s *UserService) generatePassword() string {
 	n, err := rand.Int(rand.Reader, big.NewInt(36))
 	if err != nil {
-		// Handle error, e.g. log and return an error
 		log.Println(err)
 		return ""
 	}
-
-	// Convert the number to a base64-encoded string
 	password := base64.StdEncoding.EncodeToString([]byte(n.String()))
-
-	// Trim the password to a fixed length (e.g. 12 characters)
 	password = password[:12]
-
 	return password
 }
 
