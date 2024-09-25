@@ -14,9 +14,15 @@ import (
 	"syscall"
 	"time"
 
+	"softwareIIbackend/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title					Software2Backend
+// @version					1.0
 func main() {
 	config := config.New()
 
@@ -25,7 +31,12 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer dbconn.Disconnect(ctx)
+	defer func() {
+		err := dbconn.Disconnect(ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
 	router := gin.Default()
 	if err := router.SetTrustedProxies(nil); err != nil {
@@ -65,6 +76,10 @@ func main() {
 		}
 
 	}
+
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	srv := http.Server{
 		Addr:         config.Server.Addr(),
