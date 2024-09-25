@@ -9,6 +9,7 @@ import (
 	"softwareIIbackend/internal/adapter/handler/api"
 	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
+	"softwareIIbackend/internal/adapter/service/mailersend"
 	"softwareIIbackend/internal/core/service"
 	"syscall"
 	"time"
@@ -31,6 +32,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	// email service with mailersend
+	emailService := mailersend.NewEmailService(&config.Notification)
+
 	// health
 	healthcheckHandler := api.NewHealtcheckHandler()
 
@@ -40,7 +44,7 @@ func main() {
 	userHandler := api.NewUserHandler(userService)
 
 	// auth
-	authService := service.NewAuthService()
+	authService := service.NewAuthService(&config.Auth, emailService)
 	authHandler := api.NewAuthHandler(authService, userService)
 
 	// routes
@@ -49,8 +53,10 @@ func main() {
 	v1 := router.Group("/api/v1")
 	{
 		v1.POST("/sign-in", authHandler.SignIn)
+		v1.POST("/recover-password", authHandler.RecoverPassword)
+		v1.POST("/reset-password", authHandler.ResetPassword)
 
-		user := v1.Group("/users", middleware.AuthMiddleware())
+		user := v1.Group("/users", middleware.AuthMiddleware(authService))
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
 			user.POST("/reset-password", userHandler.ResetPassword)
