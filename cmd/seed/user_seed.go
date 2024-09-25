@@ -15,7 +15,7 @@ func SeedUsers(ctx context.Context, coll *mongo.Collection) error {
 			DNI:       "12345",
 			FirstName: "Admin",
 			LastName:  "Adminstrator",
-			Email:     "admin@saludyvida.com",
+			Email:     "santiago.bedoya35419@ucaldas.edu.co",
 			Password:  encryptPassword("admin12345"),
 			Role:      domain.AdminRole,
 		},

@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"log"
 	"math/big"
 	"softwareIIbackend/internal/core/domain"
@@ -14,15 +15,19 @@ import (
 )
 
 type UserService struct {
-	repo port.UserRepository
+	repo         port.UserRepository
+	emailService port.EmailService
 }
 
-func NewUserService(repo port.UserRepository) *UserService {
+func NewUserService(repo port.UserRepository, emailService port.EmailService) *UserService {
 	return &UserService{repo: repo}
 }
 
 func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
 	return s.repo.GetUser(ctx, DNI)
+}
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
+	return s.repo.GetUserByEmail(ctx, email)
 }
 
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
@@ -42,8 +47,10 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	}
 
 	password := s.generatePassword()
-	// TODO: sent an email with the user password
-	log.Println("Password", password)
+	err := s.emailService.SendPasswordEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, password)
+	if err != nil {
+		return err
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
