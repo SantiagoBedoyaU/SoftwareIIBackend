@@ -24,6 +24,15 @@ func NewAuthHandler(authService port.AuthService, userService port.UserService) 
 	}
 }
 
+// SignIn
+// @Router			/sign-in [post]
+// @Summary			Authenticate user by DNI and Password
+// @Description		Authenticate user by DNI and Password
+// @Param			body body domain.Auth true	"User credentials"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			401	{object}	interface{}
 func (h *AuthHandler) SignIn(ctx *gin.Context) {
 	var req domain.Auth
 	if err := ctx.ShouldBindJSON(&req); err != nil {
