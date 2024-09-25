@@ -19,6 +19,9 @@ func NewUserService(repo port.UserRepository) *UserService {
 func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
 	return s.repo.GetUser(ctx, DNI)
 }
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
+	return s.repo.GetUserByEmail(ctx, email)
+}
 
 func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string) error {
 	dni := ctx.Value("userDNI")
@@ -26,7 +29,7 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string
 	if err != nil {
 		return err
 	}
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost) 
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}

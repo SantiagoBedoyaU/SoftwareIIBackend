@@ -121,7 +121,29 @@ func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 	}
 
 	// call user.service to update password
-	fmt.Println("Updating password for user", claims["sub"])
+	email := claims["sub"].(string)
+	user, err := h.userService.GetUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, repository.UserNotFoundErr) {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.Set("userDNI", user.DNI)
+	if err := h.userService.UpdateUserPassword(ctx, req.Password); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Password updated successfully",
 	})
