@@ -34,6 +34,7 @@ func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User,
 	}
 	return &user, nil
 }
+
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
 	dbname := r.conn.DBName
 	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
@@ -57,4 +58,24 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *domain.User) erro
 	result, err := coll.InsertOne(ctx, user)
 	user.ID = result.InsertedID.(primitive.ObjectID).Hex()
 	return err
+}
+
+func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.User) error {
+	dbname := r.conn.DBName
+	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	filter := bson.D{{Key: "dni", Value: user.DNI}}
+	update := bson.M{
+		"$set": bson.M{
+			"password": user.Password,
+		},
+	}
+
+	_, err := coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return domain.UserNotFoundErr
+		}
+		return err
+	}
+	return nil
 }

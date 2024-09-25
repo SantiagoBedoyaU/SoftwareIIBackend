@@ -9,6 +9,8 @@ import (
 	"math/big"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -74,4 +76,22 @@ func (s *UserService) generatePassword(ctx context.Context) string {
 	password = password[:12]
 
 	return password
+}
+
+func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string) error {
+	dni := ctx.Value("userDNI")
+	user, err := s.repo.GetUser(ctx, dni.(string))
+	if err != nil {
+		return err
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(hashedPassword)
+	err = s.repo.UpdateUserPassword(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }

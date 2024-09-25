@@ -102,3 +102,22 @@ func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 
 	ctx.Status(http.StatusAccepted)
 }
+
+func (h *UserHandler) ResetPassword(ctx *gin.Context) {
+	var req domain.UpdatePassword
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	err = h.svc.UpdateUserPassword(ctx, req.NewPassword)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Password updated successfully",
+	})
+}
