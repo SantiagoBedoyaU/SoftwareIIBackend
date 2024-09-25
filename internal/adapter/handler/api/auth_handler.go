@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"softwareIIbackend/internal/adapter/repository"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
 
@@ -35,7 +34,7 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 	}
 	user, err := h.userService.GetUser(ctx, req.DNI)
 	if err != nil {
-		if errors.Is(err, repository.UserNotFoundErr) {
+		if errors.Is(err, domain.UserNotFoundErr) {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"message": "DNI or Password incorrect",
 			})
@@ -77,7 +76,7 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 
 	user, err := h.userService.GetUser(ctx, req.DNI)
 	if err != nil {
-		if errors.Is(err, repository.UserNotFoundErr) {
+		if errors.Is(err, domain.UserNotFoundErr) {
 			ctx.JSON(http.StatusNotFound, gin.H{
 				"message": "User not found",
 			})
@@ -124,7 +123,7 @@ func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 	email := claims["sub"].(string)
 	user, err := h.userService.GetUserByEmail(ctx, email)
 	if err != nil {
-		if errors.Is(err, repository.UserNotFoundErr) {
+		if errors.Is(err, domain.UserNotFoundErr) {
 			ctx.JSON(http.StatusNotFound, gin.H{
 				"message": err.Error(),
 			})

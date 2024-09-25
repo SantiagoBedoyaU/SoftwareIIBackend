@@ -54,3 +54,10 @@ func (s *EmailService) SendRecoverPasswordEmail(ctx context.Context, fullname, e
 
 	return s.sendEmail(ctx, fullname, email, subject, text)
 }
+
+func (s *EmailService) SendPasswordEmail(ctx context.Context, fullname, email, password string) error {
+	subject := "Password Assigned"
+	text := fmt.Sprintf("Hey, %s. Your password to log in in the system is: %s", fullname, password)
+
+	return s.sendEmail(ctx, fullname, email, subject, text)
+}

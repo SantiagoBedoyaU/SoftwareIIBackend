@@ -40,7 +40,7 @@ func main() {
 
 	// user
 	userRepo := mongodb.NewUserRepository("users", dbconn)
-	userService := service.NewUserService(userRepo)
+	userService := service.NewUserService(userRepo, emailService)
 	userHandler := api.NewUserHandler(userService)
 
 	// auth
@@ -59,6 +59,8 @@ func main() {
 		user := v1.Group("/users", middleware.AuthMiddleware(authService))
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
+			user.POST("/", userHandler.CreateUser)
+			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
 		}
 

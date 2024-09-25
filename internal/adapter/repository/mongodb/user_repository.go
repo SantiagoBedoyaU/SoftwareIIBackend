@@ -3,10 +3,10 @@ package mongodb
 import (
 	"context"
 	"errors"
-	"softwareIIbackend/internal/adapter/repository"
 	"softwareIIbackend/internal/core/domain"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -28,7 +28,7 @@ func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User,
 	err := coll.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, repository.UserNotFoundErr
+			return nil, domain.UserNotFoundErr
 		}
 		return nil, err
 	}
@@ -44,11 +44,20 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*dom
 	err := coll.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, repository.UserNotFoundErr
+			return nil, domain.UserNotFoundErr
 		}
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *UserRepository) CreateUser(ctx context.Context, user *domain.User) error {
+	dbname := r.conn.DBName
+	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+
+	result, err := coll.InsertOne(ctx, user)
+	user.ID = result.InsertedID.(primitive.ObjectID).Hex()
+	return err
 }
 
 func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.User) error {
@@ -64,7 +73,7 @@ func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.Us
 	_, err := coll.UpdateOne(ctx, filter, update)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return repository.UserNotFoundErr
+			return domain.UserNotFoundErr
 		}
 		return err
 	}
