@@ -1,0 +1,38 @@
+definitions:
+  domain.Auth:
+    properties:
+      dni:
+        type: string
+      password:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Software2Backend
+  version: "1.0"
+paths:
+  /sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user by DNI and Password
+      parameters:
+      - description: User credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Auth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      summary: Authenticate user by DNI and Password
+swagger: "2.0"

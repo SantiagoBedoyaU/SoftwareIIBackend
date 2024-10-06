@@ -23,10 +23,16 @@ type User struct {
 	FirstName string      `json:"first_name" bson:"first_name"`
 	LastName  string      `json:"last_name" bson:"last_name"`
 	Email     string      `json:"email" bson:"email"`
-	Password  string      `json:"password" bson:"password"`
+	Password  string      `json:"password,omitempty" bson:"password"`
 	Role      UserRole    `json:"role" bson:"role"`
 }
 
 type UpdatePassword struct {
 	NewPassword string `json:"new_password"`
+}
+
+type UpdateUser struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
 }

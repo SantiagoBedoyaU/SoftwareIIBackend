@@ -9,13 +9,21 @@ import (
 	"softwareIIbackend/internal/adapter/handler/api"
 	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
+	"softwareIIbackend/internal/adapter/service/mailersend"
 	"softwareIIbackend/internal/core/service"
 	"syscall"
 	"time"
 
+	"softwareIIbackend/docs"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title					Software2Backend
+// @version					1.0
 func main() {
 	config := config.New()
 
@@ -24,23 +32,32 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer dbconn.Disconnect(ctx)
+	defer func() {
+		err := dbconn.Disconnect(ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
 	router := gin.Default()
 	if err := router.SetTrustedProxies(nil); err != nil {
 		log.Fatalln(err)
 	}
+	router.Use(cors.Default())
+
+	// email service with mailersend
+	emailService := mailersend.NewEmailService(&config.Notification)
 
 	// health
 	healthcheckHandler := api.NewHealtcheckHandler()
 
 	// user
 	userRepo := mongodb.NewUserRepository("users", dbconn)
-	userService := service.NewUserService(userRepo)
+	userService := service.NewUserService(userRepo, emailService)
 	userHandler := api.NewUserHandler(userService)
 
 	// auth
-	authService := service.NewAuthService()
+	authService := service.NewAuthService(&config.Auth, emailService)
 	authHandler := api.NewAuthHandler(authService, userService)
 
 	// routes
@@ -49,14 +66,24 @@ func main() {
 	v1 := router.Group("/api/v1")
 	{
 		v1.POST("/sign-in", authHandler.SignIn)
+		v1.POST("/recover-password", authHandler.RecoverPassword)
+		v1.POST("/reset-password", authHandler.ResetPassword)
 
-		user := v1.Group("/users", middleware.AuthMiddleware())
+		user := v1.Group("/users", middleware.AuthMiddleware(authService))
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
+			user.GET("/me", userHandler.GetMyInformation)
+			user.PATCH("/me", userHandler.UpdateMyInformation)
+			user.POST("/", userHandler.CreateUser)
+			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
 		}
 
 	}
+
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	srv := http.Server{
 		Addr:         config.Server.Addr(),
