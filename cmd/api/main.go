@@ -16,6 +16,7 @@ import (
 
 	"softwareIIbackend/docs"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -42,6 +43,7 @@ func main() {
 	if err := router.SetTrustedProxies(nil); err != nil {
 		log.Fatalln(err)
 	}
+	router.Use(cors.Default())
 
 	// email service with mailersend
 	emailService := mailersend.NewEmailService(&config.Notification)
