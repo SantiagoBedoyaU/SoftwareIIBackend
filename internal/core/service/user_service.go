@@ -30,20 +30,30 @@ func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain
 	return s.repo.GetUserByEmail(ctx, email)
 }
 
+func (s *UserService) GetUserInformation(ctx context.Context) (*domain.User, error) {
+	dni := ctx.Value("userDNI").(string)
+	user, err := s.repo.GetUser(ctx, dni)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = ""
+	return user, nil
+}
+
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	// we can't have another user with the same DNI
 	if _, err := s.repo.GetUser(ctx, user.DNI); err == nil {
-		return domain.UserAlreadyExistErr
+		return domain.ErrUserAlreadyExist
 	}
 
 	// we can't have another user with the same email
 	if _, err := s.repo.GetUserByEmail(ctx, user.Email); err == nil {
-		return domain.UserAlreadyExistErr
+		return domain.ErrUserAlreadyExist
 	}
 
 	// we can't allow create user with role admin
 	if user.Role == domain.AdminRole {
-		return domain.AdminRoleNotAllowedErr
+		return domain.ErrAdminRoleNotAllowed
 	}
 
 	password := s.generatePassword()
@@ -96,6 +106,24 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string
 	user.Password = string(hashedPassword)
 	err = s.repo.UpdateUserPassword(ctx, user)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *UserService) UpdateUserInformation(ctx context.Context, firstName, lastName, email string) error {
+	dni := ctx.Value("userDNI").(string)
+	currentUser, err := s.repo.GetUser(ctx, dni)
+	if err != nil {
+		return err
+	}
+	emailUser, err := s.GetUserByEmail(ctx, email)
+	if err == nil && currentUser.ID != emailUser.ID {
+		return domain.ErrUserEmailAlreadyInUse
+	}
+
+	user := domain.User{DNI: dni, FirstName: firstName, LastName: lastName, Email: email}
+	if err := s.repo.UpdateUserInformation(ctx, &user); err != nil {
 		return err
 	}
 	return nil
