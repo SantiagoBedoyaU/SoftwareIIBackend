@@ -28,7 +28,7 @@ func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User,
 	err := coll.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, domain.UserNotFoundErr
+			return nil, domain.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*dom
 	err := coll.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, domain.UserNotFoundErr
+			return nil, domain.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -73,9 +73,32 @@ func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.Us
 	_, err := coll.UpdateOne(ctx, filter, update)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return domain.UserNotFoundErr
+			return domain.ErrUserNotFound
 		}
 		return err
 	}
+	return nil
+}
+
+func (r *UserRepository) UpdateUserInformation(ctx context.Context, user *domain.User) error {
+	dbname := r.conn.DBName
+	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	filter := bson.D{{Key: "dni", Value: user.DNI}}
+	update := bson.M{
+		"$set": bson.M{
+			"first_name": user.FirstName,
+			"last_name":  user.LastName,
+			"email":      user.Email,
+		},
+	}
+
+	_, err := coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return domain.ErrUserNotFound
+		}
+		return err
+	}
+
 	return nil
 }

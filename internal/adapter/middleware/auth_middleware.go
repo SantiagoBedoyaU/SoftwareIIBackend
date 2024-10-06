@@ -12,7 +12,11 @@ import (
 func AuthMiddleware(authService port.AuthService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		bearerToken := ctx.GetHeader("authorization")
-		jwtToken := strings.Split(bearerToken, "Bearer ")[1]
+		parts := strings.Split(bearerToken, "Bearer ")
+		if len(parts) < 2 {
+			ctx.JSON(401, gin.H{"error": "invalid token"})
+		}
+		jwtToken := parts[1]
 		if jwtToken == "" {
 			ctx.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
 			return

@@ -23,7 +23,7 @@ func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 	dni := ctx.Param("dni")
 	user, err := h.svc.GetUser(ctx, dni)
 	if err != nil {
-		if errors.Is(err, domain.UserNotFoundErr) {
+		if errors.Is(err, domain.ErrUserNotFound) {
 			ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 			return
 		}
@@ -42,7 +42,7 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 	}
 
 	if err := h.svc.CreateUser(ctx, &user); err != nil {
-		if errors.Is(err, domain.UserAlreadyExistErr) || errors.Is(err, domain.AdminRoleNotAllowedErr) {
+		if errors.Is(err, domain.ErrUserAlreadyExist) || errors.Is(err, domain.ErrAdminRoleNotAllowed) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 			return
 		}
@@ -119,4 +119,34 @@ func (h *UserHandler) ResetPassword(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Password updated successfully",
 	})
+}
+
+func (h *UserHandler) GetMyInformation(ctx *gin.Context) {
+	user, err := h.svc.GetUserInformation(ctx)
+	if err != nil {
+		if errors.Is(err, domain.ErrUserNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, user)
+}
+
+func (h *UserHandler) UpdateMyInformation(ctx *gin.Context) {
+	var req domain.UpdateUser
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	if err := h.svc.UpdateUserInformation(ctx, req.FirstName, req.LastName, req.Email); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.Status(http.StatusNoContent)
 }

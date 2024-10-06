@@ -72,6 +72,8 @@ func main() {
 		user := v1.Group("/users", middleware.AuthMiddleware(authService))
 		{
 			user.GET("/:dni", userHandler.GetUserByDNI)
+			user.GET("/me", userHandler.GetMyInformation)
+			user.PATCH("/me", userHandler.UpdateMyInformation)
 			user.POST("/", userHandler.CreateUser)
 			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
