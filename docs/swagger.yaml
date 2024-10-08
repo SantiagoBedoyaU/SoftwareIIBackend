@@ -6,6 +6,11 @@ definitions:
       password:
         type: string
     type: object
+  domain.UpdatePassword:
+    properties:
+      new_password:
+        type: string
+    type: object
 info:
   contact: {}
   title: Software2Backend
@@ -35,4 +40,35 @@ paths:
           schema:
             type: object
       summary: Authenticate user by DNI and Password
+  /users/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset the password of an user by DNI
+      parameters:
+      - description: User password
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Reset the password of an user by DNI
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: authorization
+    type: apiKey
 swagger: "2.0"

@@ -102,6 +102,16 @@ func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+// ResetPassword
+// @Router			/users/reset-password [post]
+// @Summary			Reset the password of an user by DNI
+// @Description		Reset the password of an user by DNI
+// @Security 		BearerAuth
+// @Param			body body domain.UpdatePassword true	"User password"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			401	{object}	interface{}
 func (h *UserHandler) ResetPassword(ctx *gin.Context) {
 	var req domain.UpdatePassword
 	err := ctx.ShouldBindJSON(&req)
