@@ -1,4 +1,2 @@
 # Software 2 - Backend
 
-## Deploy
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=software2backend&type=docker&image=docker.io%2Fsba10%2Fsoftware2backend&env%5BDATABASE_DBNAME%5D=softwareII&env%5BDATABASE_HOST%5D=cluster0.lwbohvc.mongodb.net&env%5BDATABASE_PASSWORD%5D=LhvFg4VEUDCGsNr1&env%5BDATABASE_PORT%5D=27017&env%5BDATABASE_USER%5D=santiagobedoya35419&env%5BJWT_SECRET%5D=Untold-Garlic-Everyday&env%5BMAILER_SEND_API_TOKEN%5D=mlsn.650da23515bbade2ec73568a0dd3fe06dae8232a78f8e8bf77dab0b3f7445e4c&env%5BSERVER_PORT%5D=8000&env%5BSERVER_READ_TIMEOUT%5D=10&env%5BSERVER_WRITE_TIMEOUT%5D=10&ports=8000%3Bhttp%3B%2F&hc_protocol%5B8000%5D=http&hc_path%5B8000%5D=%2Fhealth)
