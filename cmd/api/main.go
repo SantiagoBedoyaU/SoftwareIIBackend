@@ -24,9 +24,6 @@ import (
 
 // @title					Software2Backend
 // @version					1.0
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name authorization
 func main() {
 	config := config.New()
 
