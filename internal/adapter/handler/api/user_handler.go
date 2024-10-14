@@ -34,13 +34,23 @@ func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
+// CreateUser
+// @Router /users/administrators/register-admin [post]
+// @Router /users [post]
+// @Summary			Create an regular or admin user (depending on the route)
+// @Description		Create an regular or admin user (depending on the route)
+// @Security 		BearerAuth
+// @Param			body body domain.User true	"User atributes"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			401	{object}	interface{}
 func (h *UserHandler) CreateUser(ctx *gin.Context) {
 	var user domain.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	if err := h.svc.CreateUser(ctx, &user); err != nil {
 		if errors.Is(err, domain.ErrUserAlreadyExist) || errors.Is(err, domain.ErrAdminRoleNotAllowed) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})

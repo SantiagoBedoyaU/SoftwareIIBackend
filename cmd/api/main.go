@@ -80,6 +80,10 @@ func main() {
 			user.POST("/", userHandler.CreateUser)
 			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
+			admins := user.Group("/administrators", middleware.AdminMiddleware(authService))
+			{
+				admins.POST("/register-admin", userHandler.CreateUser)
+			}
 		}
 
 	}

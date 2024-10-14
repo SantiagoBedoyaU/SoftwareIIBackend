@@ -51,3 +51,11 @@ func (s *AuthService) VerifyAccessToken(ctx context.Context, accessToken string,
 	})
 	return err
 }
+
+func (s *AuthService) ValidateAdminRol(ctx context.Context) error {
+	role := domain.UserRole(ctx.Value("userRole").(float64))
+	if role == domain.AdminRole {
+		return nil
+	}
+	return domain.ErrNotAnAdminRole
+}

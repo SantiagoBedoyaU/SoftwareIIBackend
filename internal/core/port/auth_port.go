@@ -11,4 +11,5 @@ type AuthService interface {
 	GetAuthToken(ctx context.Context, dni string, role domain.UserRole) (string, error)
 	RecoverPassword(ctx context.Context, fullname, email string) error
 	VerifyAccessToken(ctx context.Context, accessToken string, claims *jwt.MapClaims) error
+	ValidateAdminRol(ctx context.Context) error
 }

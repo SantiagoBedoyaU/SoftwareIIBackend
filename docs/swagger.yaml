@@ -11,6 +11,47 @@ definitions:
       new_password:
         type: string
     type: object
+  domain.User:
+    properties:
+      dni:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/domain.UserRole'
+      type_dni:
+        $ref: '#/definitions/domain.UserTypeDNI'
+    type: object
+  domain.UserRole:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - AdminRole
+    - MedicRole
+    - PatientRole
+  domain.UserTypeDNI:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-comments:
+      TypeDniTP: passport
+    x-enum-varnames:
+    - TypeDniCC
+    - TypeDniTI
+    - TypeDniTP
 info:
   contact: {}
   title: Software2Backend
@@ -40,6 +81,58 @@ paths:
           schema:
             type: object
       summary: Authenticate user by DNI and Password
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create an regular or admin user (depending on the route)
+      parameters:
+      - description: User atributes
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create an regular or admin user (depending on the route)
+  /users/administrators/register-admin:
+    post:
+      consumes:
+      - application/json
+      description: Create an regular or admin user (depending on the route)
+      parameters:
+      - description: User atributes
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create an regular or admin user (depending on the route)
   /users/reset-password:
     post:
       consumes:

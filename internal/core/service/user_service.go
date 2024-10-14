@@ -20,7 +20,7 @@ type UserService struct {
 }
 
 func NewUserService(repo port.UserRepository, emailService port.EmailService) *UserService {
-	return &UserService{repo: repo}
+	return &UserService{repo: repo, emailService: emailService}
 }
 
 func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
@@ -41,6 +41,7 @@ func (s *UserService) GetUserInformation(ctx context.Context) (*domain.User, err
 }
 
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
+	var Authorized bool = ctx.Value("adminPermission").(bool)
 	// we can't have another user with the same DNI
 	if _, err := s.repo.GetUser(ctx, user.DNI); err == nil {
 		return domain.ErrUserAlreadyExist
@@ -51,8 +52,8 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 		return domain.ErrUserAlreadyExist
 	}
 
-	// we can't allow create user with role admin
-	if user.Role == domain.AdminRole {
+	// we can't allow create user with role admin, unless the creator is an admin
+	if user.Role == domain.AdminRole && !Authorized {
 		return domain.ErrAdminRoleNotAllowed
 	}
 
@@ -89,7 +90,7 @@ func (s *UserService) generatePassword() string {
 		return ""
 	}
 	password := base64.StdEncoding.EncodeToString([]byte(n.String()))
-	password = password[:12]
+	password = password[:4]
 	return password
 }
 
