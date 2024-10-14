@@ -19,6 +19,16 @@ func NewUserHandler(svc port.UserService) *UserHandler {
 	return &UserHandler{svc: svc}
 }
 
+// GetUserByDNI
+// @Router			/users/:dni [get]
+// @Summary			Get user by DNI
+// @Description		Get user by DNI
+// @Param			query-id path string true	"User DNI"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 	dni := ctx.Param("dni")
 	user, err := h.svc.GetUser(ctx, dni)
@@ -35,16 +45,16 @@ func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 }
 
 // CreateUser
-// @Router /users/administrators/register-admin [post]
-// @Router /users [post]
+// @Router 			/users/administrators/register-admin [post]
+// @Router			/users [post]
 // @Summary			Create an regular or admin user (depending on the route)
 // @Description		Create an regular or admin user (depending on the route)
-// @Security 		BearerAuth
-// @Param			body body domain.User true	"User atributes"
+// @Param			body body domain.User true	"User Information"
+// @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
 // @Success			200	{object}	interface{}
-// @Failure			401	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *UserHandler) CreateUser(ctx *gin.Context) {
 	var user domain.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -63,6 +73,16 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, user)
 }
 
+// CreateUser
+// @Router			/users/load-by-csv [post]
+// @Summary			Load user information by CSV
+// @Description		Load user information by CSV
+// @Param			file formData file true	"CSV file with user information"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			multipart/form-data
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 	multipartFile, err := ctx.FormFile("file")
 	if err != nil {
@@ -116,7 +136,6 @@ func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 // @Router			/users/reset-password [post]
 // @Summary			Reset the password of an user by DNI
 // @Description		Reset the password of an user by DNI
-// @Security 		BearerAuth
 // @Param			body body domain.UpdatePassword true	"User password"
 // @Accept			json
 // @Produce			json
@@ -141,6 +160,15 @@ func (h *UserHandler) ResetPassword(ctx *gin.Context) {
 	})
 }
 
+// GetMyInformation
+// @Router			/users/me [get]
+// @Summary			Get authenticated user information
+// @Description		Get authenticated user information
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *UserHandler) GetMyInformation(ctx *gin.Context) {
 	user, err := h.svc.GetUserInformation(ctx)
 	if err != nil {
@@ -156,6 +184,16 @@ func (h *UserHandler) GetMyInformation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
+// GetMyInformation
+// @Router			/users/me [patch]
+// @Summary			Update authenticated user information
+// @Description		Update authenticated user information
+// @Param			body body domain.UpdateUser true	"User information to update"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *UserHandler) UpdateMyInformation(ctx *gin.Context) {
 	var req domain.UpdateUser
 	if err := ctx.ShouldBindJSON(&req); err != nil {

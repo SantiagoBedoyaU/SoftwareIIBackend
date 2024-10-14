@@ -15,6 +15,80 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/recover-password": {
+            "post": {
+                "description": "Recover user password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Recover user password",
+                "parameters": [
+                    {
+                        "description": "Recover Passsword information",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.RecoverPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "description": "Reset user password with verification token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Reset user password with verification token",
+                "parameters": [
+                    {
+                        "description": "Reset User Password",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.ResetPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/sign-in": {
             "post": {
                 "description": "Authenticate user by DNI and Password",
@@ -54,11 +128,6 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Create an regular or admin user (depending on the route)",
                 "consumes": [
                     "application/json"
@@ -69,13 +138,20 @@ const docTemplate = `{
                 "summary": "Create an regular or admin user (depending on the route)",
                 "parameters": [
                     {
-                        "description": "User atributes",
+                        "description": "User Information",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/domain.User"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -85,8 +161,50 @@ const docTemplate = `{
                             "type": "object"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/:dni": {
+            "get": {
+                "description": "Get user by DNI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user by DNI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User DNI",
+                        "name": "query-id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "type": "object"
                         }
@@ -96,11 +214,6 @@ const docTemplate = `{
         },
         "/users/administrators/register-admin": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Create an regular or admin user (depending on the route)",
                 "consumes": [
                     "application/json"
@@ -111,13 +224,20 @@ const docTemplate = `{
                 "summary": "Create an regular or admin user (depending on the route)",
                 "parameters": [
                     {
-                        "description": "User atributes",
+                        "description": "User Information",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/domain.User"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -127,8 +247,127 @@ const docTemplate = `{
                             "type": "object"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/load-by-csv": {
+            "post": {
+                "description": "Load user information by CSV",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Load user information by CSV",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "CSV file with user information",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "description": "Get authenticated user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get authenticated user information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update authenticated user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update authenticated user information",
+                "parameters": [
+                    {
+                        "description": "User information to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.UpdateUser"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "type": "object"
                         }
@@ -138,11 +377,6 @@ const docTemplate = `{
         },
         "/users/reset-password": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "Reset the password of an user by DNI",
                 "consumes": [
                     "application/json"
@@ -191,10 +425,43 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.RecoverPassword": {
+            "type": "object",
+            "properties": {
+                "dni": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.ResetPassword": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.UpdatePassword": {
             "type": "object",
             "properties": {
                 "new_password": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UpdateUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
                     "type": "string"
                 }
             }
@@ -256,13 +523,6 @@ const docTemplate = `{
                 "TypeDniTI",
                 "TypeDniTP"
             ]
-        }
-    },
-    "securityDefinitions": {
-        "BearerAuth": {
-            "type": "apiKey",
-            "name": "authorization",
-            "in": "header"
         }
     }
 }`

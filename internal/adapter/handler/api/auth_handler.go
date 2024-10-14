@@ -74,6 +74,15 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 	})
 }
 
+// RecoverPassword
+// @Router			/recover-password [post]
+// @Summary			Recover user password
+// @Description		Recover user password
+// @Param			body body domain.RecoverPassword true	"Recover Passsword information"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 	var req domain.RecoverPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -110,6 +119,15 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 	})
 }
 
+// ResetPassword
+// @Router			/reset-password [post]
+// @Summary			Reset user password with verification token
+// @Description		Reset user password with verification token
+// @Param			body body domain.ResetPassword true	"Reset User Password"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
 func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 	var req domain.ResetPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
