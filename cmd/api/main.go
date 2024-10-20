@@ -77,6 +77,7 @@ func main() {
 			user.POST("/", userHandler.CreateUser)
 			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
+			user.PATCH("/assign-role", userHandler.UpdateUserRole)
 		}
 
 	}

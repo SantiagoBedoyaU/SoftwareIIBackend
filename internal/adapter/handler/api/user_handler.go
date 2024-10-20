@@ -207,3 +207,40 @@ func (h *UserHandler) UpdateMyInformation(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusNoContent)
 }
+
+// UpdateUserRole
+// @Router			/users/assign-role [patch]
+// @Summary			Assign user role by an admin
+// @Description		Assign user role by an admin
+// @Param			body body domain.UpdateRole true	"Role to update"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			404	{object}	interface{}
+func (h *UserHandler) UpdateUserRole(ctx *gin.Context) {
+	var req domain.UpdateRole
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	if err := h.svc.UpdateUserRole(ctx, req.DNI, req.NewRole); err != nil {
+		if err == domain.ErrNotAnAdminRole{
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+		if err == domain.ErrUserNotFound{
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.Status(http.StatusNoContent)
+}

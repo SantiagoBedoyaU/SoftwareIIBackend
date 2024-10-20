@@ -102,3 +102,23 @@ func (r *UserRepository) UpdateUserInformation(ctx context.Context, user *domain
 
 	return nil
 }
+
+func (r *UserRepository) UpdateUserRole(ctx context.Context, updateRole *domain.UpdateRole) error {
+	dbname := r.conn.DBName
+	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	filter := bson.D{{Key: "dni", Value: updateRole.DNI}}
+	update := bson.M{
+		"$set": bson.M{
+			"role": updateRole.NewRole,
+		},
+	}
+
+	_, err := coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return domain.ErrUserNotFound
+		}
+		return err
+	}
+	return nil
+}

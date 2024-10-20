@@ -23,6 +23,13 @@ definitions:
       new_password:
         type: string
     type: object
+  domain.UpdateRole:
+    properties:
+      dni:
+        type: string
+      new_role:
+        type: integer
+    type: object
   domain.UpdateUser:
     properties:
       email:
@@ -207,6 +214,35 @@ paths:
           schema:
             type: object
       summary: Get user by DNI
+  /users/assign-role:
+    patch:
+      consumes:
+      - application/json
+      description: Assign user role by an admin
+      parameters:
+      - description: Role to update
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateRole'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Assign user role by an admin
   /users/load-by-csv:
     post:
       consumes:
