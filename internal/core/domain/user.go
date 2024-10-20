@@ -36,3 +36,8 @@ type UpdateUser struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
 }
+
+type UpdateRole struct {
+	DNI string  `json:"dni"`
+	NewRole int `json:"new_role"`
+}

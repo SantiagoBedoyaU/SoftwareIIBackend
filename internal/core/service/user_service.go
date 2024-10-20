@@ -129,3 +129,26 @@ func (s *UserService) UpdateUserInformation(ctx context.Context, firstName, last
 	}
 	return nil
 }
+
+func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole int) error {
+	role := ctx.Value("userRole").(float64)
+
+	// Only an admin can assign roles
+	if role != float64(domain.AdminRole) {
+		return domain.ErrNotAnAdminRole
+	}
+	user, err := s.repo.GetUser(ctx, dni)
+	if err != nil {
+		return err
+	}
+
+	// Do nothing if the new role it's the same as the old
+	if newRole == int(user.Role) {
+		return nil
+	}
+	updateRole := domain.UpdateRole{DNI: dni, NewRole: newRole}
+	if err := s.repo.UpdateUserRole(ctx, &updateRole); err != nil {
+		return err
+	}
+	return nil
+}
