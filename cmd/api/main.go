@@ -60,6 +60,11 @@ func main() {
 	authService := service.NewAuthService(&config.Auth, emailService)
 	authHandler := api.NewAuthHandler(authService, userService)
 
+	// appointment
+	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
+	appointmentService := service.NewAppointmentService(appointmentRepo)
+	appointmentHandler := api.NewAppointmentHandler(appointmentService)
+
 	// routes
 	router.GET("/health", healthcheckHandler.HealthCheck)
 
@@ -77,6 +82,10 @@ func main() {
 			user.POST("/", userHandler.CreateUser)
 			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
+		}
+		appointment := v1.Group("/appointments", middleware.AuthMiddleware(authService))
+		{
+			appointment.GET("/", appointmentHandler.GetAppointments)
 		}
 
 	}

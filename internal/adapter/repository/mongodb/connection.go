@@ -37,3 +37,7 @@ func NewMongodbConnection(ctx context.Context, cfg config.DatabaseConfig) (*Mong
 func (m *MongoDBConnection) Disconnect(ctx context.Context) error {
 	return m.Client.Disconnect(ctx)
 }
+
+func (m *MongoDBConnection) GetDatabase() *mongo.Database {
+	return m.Client.Database(m.DBName)
+}

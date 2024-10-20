@@ -32,7 +32,9 @@ type AuthConfig struct {
 }
 
 type NotificationConfig struct {
-	MailerSendAPIToken string
+	MailerSendAPIToken  string
+	MailerSendFromEmail string
+	FrontendURL         string
 }
 
 type Config struct {
@@ -62,6 +64,8 @@ func New() *Config {
 	cfg.Auth.JwtSecret = os.Getenv("JWT_SECRET")
 
 	cfg.Notification.MailerSendAPIToken = os.Getenv("MAILER_SEND_API_TOKEN")
+	cfg.Notification.MailerSendFromEmail = os.Getenv("MAILER_SEND_FROM_EMAIL")
+	cfg.Notification.FrontendURL = os.Getenv("FRONTEND_URL")
 
 	return cfg
 }
