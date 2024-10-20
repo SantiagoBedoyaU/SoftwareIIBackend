@@ -20,8 +20,7 @@ func NewUserRepository(collname string, conn *MongoDBConnection) *UserRepository
 }
 
 func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	var user domain.User
 	filter := bson.D{{Key: "dni", Value: DNI}}
@@ -36,8 +35,7 @@ func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User,
 }
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	var user domain.User
 	filter := bson.D{{Key: "email", Value: email}}
@@ -52,8 +50,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*dom
 }
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *domain.User) error {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	result, err := coll.InsertOne(ctx, user)
 	user.ID = result.InsertedID.(primitive.ObjectID).Hex()
@@ -61,8 +58,7 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *domain.User) erro
 }
 
 func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.User) error {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 	filter := bson.D{{Key: "dni", Value: user.DNI}}
 	update := bson.M{
 		"$set": bson.M{
@@ -81,8 +77,7 @@ func (r *UserRepository) UpdateUserPassword(ctx context.Context, user *domain.Us
 }
 
 func (r *UserRepository) UpdateUserInformation(ctx context.Context, user *domain.User) error {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 	filter := bson.D{{Key: "dni", Value: user.DNI}}
 	update := bson.M{
 		"$set": bson.M{
