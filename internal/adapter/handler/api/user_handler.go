@@ -46,8 +46,8 @@ func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 
 // CreateUser
 // @Router			/users [post]
-// @Summary			Create user
-// @Description		Create user
+// @Summary			Create an regular or admin user
+// @Description		Create an regular or admin user
 // @Param			body body domain.User true	"User Information"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
@@ -60,7 +60,6 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	if err := h.svc.CreateUser(ctx, &user); err != nil {
 		if errors.Is(err, domain.ErrUserAlreadyExist) || errors.Is(err, domain.ErrAdminRoleNotAllowed) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
@@ -132,6 +131,15 @@ func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+// ResetPassword
+// @Router			/users/reset-password [post]
+// @Summary			Reset the password of an user by DNI
+// @Description		Reset the password of an user by DNI
+// @Param			body body domain.UpdatePassword true	"User password"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	interface{}
+// @Failure			401	{object}	interface{}
 func (h *UserHandler) ResetPassword(ctx *gin.Context) {
 	var req domain.UpdatePassword
 	err := ctx.ShouldBindJSON(&req)

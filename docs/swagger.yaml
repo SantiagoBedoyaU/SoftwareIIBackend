@@ -18,6 +18,11 @@ definitions:
       password:
         type: string
     type: object
+  domain.UpdatePassword:
+    properties:
+      new_password:
+        type: string
+    type: object
   domain.UpdateUser:
     properties:
       email:
@@ -149,7 +154,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create user
+      description: Create an regular or admin user
       parameters:
       - description: User Information
         in: body
@@ -173,7 +178,7 @@ paths:
           description: Not Found
           schema:
             type: object
-      summary: Create user
+      summary: Create an regular or admin user
   /users/:dni:
     get:
       consumes:
@@ -281,4 +286,28 @@ paths:
           schema:
             type: object
       summary: Update authenticated user information
+  /users/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset the password of an user by DNI
+      parameters:
+      - description: User password
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+      summary: Reset the password of an user by DNI
 swagger: "2.0"

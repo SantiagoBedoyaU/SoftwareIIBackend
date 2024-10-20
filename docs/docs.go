@@ -128,14 +128,14 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
-                "description": "Create user",
+                "description": "Create an regular or admin user",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create user",
+                "summary": "Create an regular or admin user",
                 "parameters": [
                     {
                         "description": "User Information",
@@ -330,6 +330,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users/reset-password": {
+            "post": {
+                "description": "Reset the password of an user by DNI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Reset the password of an user by DNI",
+                "parameters": [
+                    {
+                        "description": "User password",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.UpdatePassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -359,6 +396,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UpdatePassword": {
+            "type": "object",
+            "properties": {
+                "new_password": {
                     "type": "string"
                 }
             }
