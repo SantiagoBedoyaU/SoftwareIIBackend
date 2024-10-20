@@ -45,10 +45,9 @@ func (h *UserHandler) GetUserByDNI(ctx *gin.Context) {
 }
 
 // CreateUser
-// @Router 			/users/administrators/register-admin [post]
 // @Router			/users [post]
-// @Summary			Create an regular or admin user (depending on the route)
-// @Description		Create an regular or admin user (depending on the route)
+// @Summary			Create an regular or admin user
+// @Description		Create an regular or admin user
 // @Param			body body domain.User true	"User Information"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json

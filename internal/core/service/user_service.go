@@ -41,7 +41,7 @@ func (s *UserService) GetUserInformation(ctx context.Context) (*domain.User, err
 }
 
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
-	var Authorized bool = ctx.Value("adminPermission").(bool)
+	var Authorized float64  = ctx.Value("userRole").(float64)
 	// we can't have another user with the same DNI
 	if _, err := s.repo.GetUser(ctx, user.DNI); err == nil {
 		return domain.ErrUserAlreadyExist
@@ -53,7 +53,7 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	}
 
 	// we can't allow create user with role admin, unless the creator is an admin
-	if user.Role == domain.AdminRole && !Authorized {
+	if user.Role == domain.AdminRole && Authorized != float64(domain.AdminRole) {
 		return domain.ErrAdminRoleNotAllowed
 	}
 

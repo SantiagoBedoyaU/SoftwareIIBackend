@@ -128,14 +128,14 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
-                "description": "Create an regular or admin user (depending on the route)",
+                "description": "Create an regular or admin user",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create an regular or admin user (depending on the route)",
+                "summary": "Create an regular or admin user",
                 "parameters": [
                     {
                         "description": "User Information",
@@ -187,50 +187,6 @@ const docTemplate = `{
                         "name": "query-id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Authorization Token",
-                        "name": "authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/administrators/register-admin": {
-            "post": {
-                "description": "Create an regular or admin user (depending on the route)",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create an regular or admin user (depending on the route)",
-                "parameters": [
-                    {
-                        "description": "User Information",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.User"
-                        }
                     },
                     {
                         "type": "string",

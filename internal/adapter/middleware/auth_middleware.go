@@ -31,6 +31,5 @@ func AuthMiddleware(authService port.AuthService) gin.HandlerFunc {
 
 		ctx.Set("userDNI", claims["sub"])
 		ctx.Set("userRole", claims["role"])
-		ctx.Set("adminPermission", false)
 	}
 }

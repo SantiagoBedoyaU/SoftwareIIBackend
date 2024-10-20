@@ -154,7 +154,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create an regular or admin user (depending on the route)
+      description: Create an regular or admin user
       parameters:
       - description: User Information
         in: body
@@ -178,7 +178,7 @@ paths:
           description: Not Found
           schema:
             type: object
-      summary: Create an regular or admin user (depending on the route)
+      summary: Create an regular or admin user
   /users/:dni:
     get:
       consumes:
@@ -207,35 +207,6 @@ paths:
           schema:
             type: object
       summary: Get user by DNI
-  /users/administrators/register-admin:
-    post:
-      consumes:
-      - application/json
-      description: Create an regular or admin user (depending on the route)
-      parameters:
-      - description: User Information
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/domain.User'
-      - description: Authorization Token
-        in: header
-        name: authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            type: object
-      summary: Create an regular or admin user (depending on the route)
   /users/load-by-csv:
     post:
       consumes:
