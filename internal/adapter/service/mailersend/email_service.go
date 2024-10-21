@@ -10,13 +10,15 @@ import (
 )
 
 type EmailService struct {
-	ms *mailersend.Mailersend
+	cfg *config.NotificationConfig
+	ms  *mailersend.Mailersend
 }
 
 func NewEmailService(cfg *config.NotificationConfig) *EmailService {
 	ms := mailersend.NewMailersend(cfg.MailerSendAPIToken)
 	return &EmailService{
-		ms: ms,
+		cfg: cfg,
+		ms:  ms,
 	}
 }
 
@@ -26,7 +28,7 @@ func (s *EmailService) sendEmail(ctx context.Context, fullname, email, subject, 
 
 	from := mailersend.From{
 		Name:  "Salud Y Vida",
-		Email: "saludyvida@trial-pxkjn41ykz64z781.mlsender.net",
+		Email: s.cfg.MailerSendFromEmail,
 	}
 
 	recipients := []mailersend.Recipient{
@@ -49,7 +51,7 @@ func (s *EmailService) sendEmail(ctx context.Context, fullname, email, subject, 
 func (s *EmailService) SendRecoverPasswordEmail(ctx context.Context, fullname, email, token string) error {
 	subject := "Password Recovery"
 
-	url := fmt.Sprintf("http://localhost:8000/password-reset?at=%s", token)
+	url := fmt.Sprintf("%s/security/password-reset?at=%s", s.cfg.FrontendURL, token)
 	text := fmt.Sprintf("Hey, %s. Your password recovery link is: %s", fullname, url)
 
 	return s.sendEmail(ctx, fullname, email, subject, text)
