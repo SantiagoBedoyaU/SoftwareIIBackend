@@ -9,7 +9,7 @@ import (
 	"softwareIIbackend/internal/adapter/handler/api"
 	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
-	"softwareIIbackend/internal/adapter/service/mailersend"
+	"softwareIIbackend/internal/adapter/service/mailgun"
 	"softwareIIbackend/internal/core/service"
 	"syscall"
 	"time"
@@ -46,7 +46,7 @@ func main() {
 	router.Use(cors.Default())
 
 	// email service with mailersend
-	emailService := mailersend.NewEmailService(&config.Notification)
+	emailService := mailgun.NewEmailService(&config.Notification)
 
 	// health
 	healthcheckHandler := api.NewHealtcheckHandler()
