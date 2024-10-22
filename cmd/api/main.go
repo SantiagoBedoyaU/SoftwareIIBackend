@@ -43,7 +43,7 @@ func main() {
 	if err := router.SetTrustedProxies(nil); err != nil {
 		log.Fatalln(err)
 	}
-	router.Use(cors.Default())
+	router.Use(cors.New(corsConfig()))
 
 	// email service with mailersend
 	emailService := mailgun.NewEmailService(&config.Notification)
@@ -114,4 +114,11 @@ func main() {
 	if err := srv.Shutdown(context.TODO()); err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func corsConfig() cors.Config {
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AddAllowHeaders("Authorization")
+	corsConfig.AllowAllOrigins = true
+	return corsConfig
 }
