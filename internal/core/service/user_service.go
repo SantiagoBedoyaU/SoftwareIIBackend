@@ -2,14 +2,12 @@ package service
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
 	"errors"
 	"fmt"
-	"log"
-	"math/big"
+	"math/rand"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -41,7 +39,7 @@ func (s *UserService) GetUserInformation(ctx context.Context) (*domain.User, err
 }
 
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
-	var Authorized float64  = ctx.Value("userRole").(float64)
+	var Authorized float64 = ctx.Value("userRole").(float64)
 	// we can't have another user with the same DNI
 	if _, err := s.repo.GetUser(ctx, user.DNI); err == nil {
 		return domain.ErrUserAlreadyExist
@@ -57,11 +55,8 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 		return domain.ErrAdminRoleNotAllowed
 	}
 
-	password := s.generatePassword()
-	err := s.emailService.SendPasswordEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, password)
-	if err != nil {
-		return err
-	}
+	password := strings.ToLower(fmt.Sprintf("%s-%d", strings.Split(user.Email, "@")[0], rand.Intn(1000)))
+	_ = s.emailService.SendPasswordEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, password)
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -81,17 +76,6 @@ func (s *UserService) LoadUserByCSV(ctx context.Context, users []*domain.User) e
 
 	err := errors.Join(errs...)
 	return err
-}
-
-func (s *UserService) generatePassword() string {
-	n, err := rand.Int(rand.Reader, big.NewInt(36))
-	if err != nil {
-		log.Println(err)
-		return ""
-	}
-	password := base64.StdEncoding.EncodeToString([]byte(n.String()))
-	password = password[:4]
-	return password
 }
 
 func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string) error {
