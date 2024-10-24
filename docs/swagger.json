@@ -183,6 +183,50 @@
                 }
             }
         },
+        "/users/assign-role": {
+            "patch": {
+                "description": "Assign user role by an admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Assign user role by an admin",
+                "parameters": [
+                    {
+                        "description": "Role to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.UpdateRole"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/users/load-by-csv": {
             "post": {
                 "description": "Load user information by CSV",
@@ -360,6 +404,17 @@
             "properties": {
                 "new_password": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.UpdateRole": {
+            "type": "object",
+            "properties": {
+                "dni": {
+                    "type": "string"
+                },
+                "new_role": {
+                    "type": "integer"
                 }
             }
         },
