@@ -99,8 +99,7 @@ func (r *UserRepository) UpdateUserInformation(ctx context.Context, user *domain
 }
 
 func (r *UserRepository) UpdateUserRole(ctx context.Context, updateRole *domain.UpdateRole) error {
-	dbname := r.conn.DBName
-	coll := r.conn.Client.Database(dbname).Collection(r.CollName)
+	coll := r.conn.GetDatabase().Collection(r.CollName)
 	filter := bson.D{{Key: "dni", Value: updateRole.DNI}}
 	update := bson.M{
 		"$set": bson.M{

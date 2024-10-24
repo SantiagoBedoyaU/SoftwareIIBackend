@@ -13,7 +13,7 @@ type UserService interface {
 	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
 	UpdateUserPassword(ctx context.Context, newPassword string) error
 	UpdateUserInformation(ctx context.Context, firstName, lastName, email string) error
-	UpdateUserRole(ctx context.Context, dni string, role int) error
+	UpdateUserRole(ctx context.Context, dni string, role domain.UserRole) error
 }
 
 type UserRepository interface {

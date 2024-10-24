@@ -114,7 +114,7 @@ func (s *UserService) UpdateUserInformation(ctx context.Context, firstName, last
 	return nil
 }
 
-func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole int) error {
+func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole domain.UserRole) error {
 	role := ctx.Value("userRole").(float64)
 
 	// Only an admin can assign roles
@@ -127,7 +127,7 @@ func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole in
 	}
 
 	// Do nothing if the new role it's the same as the old
-	if newRole == int(user.Role) {
+	if newRole == user.Role {
 		return nil
 	}
 	updateRole := domain.UpdateRole{DNI: dni, NewRole: newRole}

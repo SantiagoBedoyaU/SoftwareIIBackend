@@ -55,6 +55,6 @@ type UpdateUser struct {
 }
 
 type UpdateRole struct {
-	DNI string  `json:"dni"`
-	NewRole int `json:"new_role"`
+	DNI string  	 `json:"dni"`
+	NewRole UserRole `json:"new_role"`
 }

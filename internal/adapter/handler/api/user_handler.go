@@ -136,6 +136,7 @@ func (h *UserHandler) LoadUserByCSV(ctx *gin.Context) {
 // @Summary			Reset the password of an user by DNI
 // @Description		Reset the password of an user by DNI
 // @Param			body body domain.UpdatePassword true	"User password"
+// @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
 // @Success			200	{object}	interface{}
