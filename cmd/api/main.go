@@ -9,7 +9,7 @@ import (
 	"softwareIIbackend/internal/adapter/handler/api"
 	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
-	"softwareIIbackend/internal/adapter/service/mailersend"
+	"softwareIIbackend/internal/adapter/service/mailgun"
 	"softwareIIbackend/internal/core/service"
 	"syscall"
 	"time"
@@ -43,10 +43,10 @@ func main() {
 	if err := router.SetTrustedProxies(nil); err != nil {
 		log.Fatalln(err)
 	}
-	router.Use(cors.Default())
+	router.Use(cors.New(corsConfig()))
 
 	// email service with mailersend
-	emailService := mailersend.NewEmailService(&config.Notification)
+	emailService := mailgun.NewEmailService(&config.Notification)
 
 	// health
 	healthcheckHandler := api.NewHealtcheckHandler()
@@ -59,6 +59,11 @@ func main() {
 	// auth
 	authService := service.NewAuthService(&config.Auth, emailService)
 	authHandler := api.NewAuthHandler(authService, userService)
+
+	// appointment
+	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
+	appointmentService := service.NewAppointmentService(appointmentRepo)
+	appointmentHandler := api.NewAppointmentHandler(appointmentService)
 
 	// routes
 	router.GET("/health", healthcheckHandler.HealthCheck)
@@ -77,6 +82,10 @@ func main() {
 			user.POST("/", userHandler.CreateUser)
 			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
 			user.POST("/reset-password", userHandler.ResetPassword)
+		}
+		appointment := v1.Group("/appointments", middleware.AuthMiddleware(authService))
+		{
+			appointment.GET("/", appointmentHandler.GetAppointments)
 		}
 
 	}
@@ -105,4 +114,11 @@ func main() {
 	if err := srv.Shutdown(context.TODO()); err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func corsConfig() cors.Config {
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AddAllowHeaders("Authorization")
+	corsConfig.AllowAllOrigins = true
+	return corsConfig
 }
