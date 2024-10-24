@@ -102,12 +102,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Recover user password
   /reset-password:
     post:
@@ -126,12 +124,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Reset user password with verification token
   /sign-in:
     post:
@@ -150,12 +146,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "401":
           description: Unauthorized
-          schema:
-            type: object
+          schema: {}
       summary: Authenticate user by DNI and Password
   /users:
     post:
@@ -179,12 +173,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Create an regular or admin user
   /users/:dni:
     get:
@@ -207,12 +199,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Get user by DNI
   /users/assign-role:
     patch:
@@ -264,12 +254,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Load user information by CSV
   /users/me:
     get:
@@ -287,12 +275,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Get authenticated user information
     patch:
       consumes:
@@ -315,12 +301,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Update authenticated user information
   /users/reset-password:
     post:
@@ -339,11 +323,9 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "401":
           description: Unauthorized
-          schema:
-            type: object
+          schema: {}
       summary: Reset the password of an user by DNI
 swagger: "2.0"
