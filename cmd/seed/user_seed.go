@@ -19,6 +19,24 @@ func SeedUsers(ctx context.Context, coll *mongo.Collection) error {
 			Password:  encryptPassword("admin12345"),
 			Role:      domain.AdminRole,
 		},
+		domain.User{
+			TypeDNI:   domain.TypeDniCC,
+			DNI:       "54321",
+			FirstName: "Sofia",
+			LastName:  "Espinosa",
+			Email:     "sofia.espinosa31634@ucaldas.edu.co",
+			Password:  encryptPassword("sofia12345"),
+			Role:      domain.MedicRole,
+		},
+		domain.User{
+			TypeDNI:   domain.TypeDniCC,
+			DNI:       "02468",
+			FirstName: "Natalia",
+			LastName:  "No sé",
+			Email:     "natalia.gallego30957@ucaldas.edu.co",
+			Password:  encryptPassword("natalia12345"),
+			Role:      domain.PatientRole,
+		},
 	}
 
 	_, err := coll.InsertMany(ctx, users)
