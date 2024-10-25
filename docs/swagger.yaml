@@ -28,19 +28,25 @@ definitions:
       dni:
         type: string
       new_role:
-        type: integer
+        $ref: '#/definitions/domain.UserRole'
     type: object
   domain.UpdateUser:
     properties:
+      address:
+        type: string
       email:
         type: string
       first_name:
         type: string
       last_name:
         type: string
+      phone:
+        type: string
     type: object
   domain.User:
     properties:
+      address:
+        type: string
       dni:
         type: string
       email:
@@ -49,14 +55,23 @@ definitions:
         type: string
       id:
         type: string
+      is_active:
+        default: true
+        type: boolean
       last_name:
         type: string
       password:
+        type: string
+      phone:
         type: string
       role:
         $ref: '#/definitions/domain.UserRole'
       type_dni:
         $ref: '#/definitions/domain.UserTypeDNI'
+    required:
+    - dni
+    - email
+    - first_name
     type: object
   domain.UserRole:
     enum:
@@ -226,12 +241,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Assign user role by an admin
   /users/load-by-csv:
     post:
@@ -318,6 +331,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/domain.UpdatePassword'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:

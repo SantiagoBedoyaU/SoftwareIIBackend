@@ -223,15 +223,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -362,6 +358,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.UpdatePassword"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -423,13 +426,16 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "new_role": {
-                    "type": "integer"
+                    "$ref": "#/definitions/domain.UserRole"
                 }
             }
         },
         "domain.UpdateUser": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -438,12 +444,23 @@ const docTemplate = `{
                 },
                 "last_name": {
                     "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
         "domain.User": {
             "type": "object",
+            "required": [
+                "dni",
+                "email",
+                "first_name"
+            ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "dni": {
                     "type": "string"
                 },
@@ -456,10 +473,17 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "is_active": {
+                    "type": "boolean",
+                    "default": true
+                },
                 "last_name": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 },
                 "role": {
