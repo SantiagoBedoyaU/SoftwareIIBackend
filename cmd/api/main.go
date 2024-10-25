@@ -119,9 +119,12 @@ func main() {
 
 func corsConfig() cors.Config {
 	config := cors.Config{
-		AllowAllOrigins: true,
-		AllowMethods:    []string{"*"},
-		AllowHeaders:    []string{"*"},
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"*"},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
 	}
 	return config
 }
