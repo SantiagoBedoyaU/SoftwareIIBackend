@@ -118,8 +118,10 @@ func main() {
 }
 
 func corsConfig() cors.Config {
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AddAllowHeaders("Authorization")
-	corsConfig.AllowAllOrigins = true
-	return corsConfig
+	config := cors.Config{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"*"},
+		AllowHeaders:    []string{"*"},
+	}
+	return config
 }
