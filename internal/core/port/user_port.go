@@ -12,7 +12,7 @@ type UserService interface {
 	LoadUserByCSV(ctx context.Context, users []*domain.User) error
 	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
 	UpdateUserPassword(ctx context.Context, newPassword string) error
-	UpdateUserInformation(ctx context.Context, firstName, lastName, email string) error
+	UpdateUserInformation(ctx context.Context, user *domain.UpdateUser) error
 	UpdateUserRole(ctx context.Context, dni string, role domain.UserRole) error
 }
 

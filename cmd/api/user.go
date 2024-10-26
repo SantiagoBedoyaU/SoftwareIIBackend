@@ -197,7 +197,7 @@ func (app *application) UpdateMyInformationHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	if err := app.services.userService.UpdateUserInformation(ctx, req.FirstName, req.LastName, req.Email); err != nil {
+	if err := app.services.userService.UpdateUserInformation(ctx, &req); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
 		})

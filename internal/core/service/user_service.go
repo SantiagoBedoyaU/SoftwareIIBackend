@@ -96,19 +96,26 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string
 	return nil
 }
 
-func (s *UserService) UpdateUserInformation(ctx context.Context, firstName, lastName, email string) error {
+func (s *UserService) UpdateUserInformation(ctx context.Context, user *domain.UpdateUser) error {
 	dni := ctx.Value("userDNI").(string)
 	currentUser, err := s.repo.GetUser(ctx, dni)
 	if err != nil {
 		return err
 	}
-	emailUser, err := s.GetUserByEmail(ctx, email)
+	emailUser, err := s.GetUserByEmail(ctx, user.Email)
 	if err == nil && currentUser.ID != emailUser.ID {
 		return domain.ErrUserEmailAlreadyInUse
 	}
 
-	user := domain.User{DNI: dni, FirstName: firstName, LastName: lastName, Email: email}
-	if err := s.repo.UpdateUserInformation(ctx, &user); err != nil {
+	updateUser := domain.User{
+		DNI:       dni,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Address:   user.Address,
+		Phone:     user.Phone,
+	}
+	if err := s.repo.UpdateUserInformation(ctx, &updateUser); err != nil {
 		return err
 	}
 	return nil
