@@ -1,39 +1,27 @@
-package api
+package main
 
 import (
 	"errors"
 	"fmt"
 	"net/http"
 	"softwareIIbackend/internal/core/domain"
-	"softwareIIbackend/internal/core/port"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthHandler struct {
-	authService port.AuthService
-	userService port.UserService
-}
-
-func NewAuthHandler(authService port.AuthService, userService port.UserService) *AuthHandler {
-	return &AuthHandler{
-		authService: authService,
-		userService: userService,
-	}
-}
-
-// SignIn
+// SignInHandler
 // @Router			/sign-in [post]
 // @Summary			Authenticate user by DNI and Password
 // @Description		Authenticate user by DNI and Password
+// @Tags Auth
 // @Param			body body domain.Auth true	"User credentials"
 // @Accept			json
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			401	{object}	interface{}
-func (h *AuthHandler) SignIn(ctx *gin.Context) {
+func (app *application) SignInHandler(ctx *gin.Context) {
 	var req domain.Auth
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -41,7 +29,7 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 		})
 		return
 	}
-	user, err := h.userService.GetUser(ctx, req.DNI)
+	user, err := app.services.userService.GetUser(ctx, req.DNI)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -62,7 +50,7 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := h.authService.GetAuthToken(ctx, user.DNI, user.Role)
+	accessToken, err := app.services.authService.GetAuthToken(ctx, user.DNI, user.Role)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
@@ -74,16 +62,17 @@ func (h *AuthHandler) SignIn(ctx *gin.Context) {
 	})
 }
 
-// RecoverPassword
+// RecoverPasswordHandler
 // @Router			/recover-password [post]
 // @Summary			Recover user password
 // @Description		Recover user password
+// @Tags Auth
 // @Param			body body domain.RecoverPassword true	"Recover Passsword information"
 // @Accept			json
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
+func (app *application) RecoverPasswordHandler(ctx *gin.Context) {
 	var req domain.RecoverPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -92,7 +81,7 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetUser(ctx, req.DNI)
+	user, err := app.services.userService.GetUser(ctx, req.DNI)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			ctx.JSON(http.StatusNotFound, gin.H{
@@ -107,7 +96,7 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 	}
 
 	fullname := fmt.Sprintf("%s %s", user.FirstName, user.LastName)
-	if err := h.authService.RecoverPassword(ctx, fullname, user.Email); err != nil {
+	if err := app.services.authService.RecoverPassword(ctx, fullname, user.Email); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
 		})
@@ -119,16 +108,17 @@ func (h *AuthHandler) RecoverPassword(ctx *gin.Context) {
 	})
 }
 
-// ResetPassword
+// ResetPasswordHandler
 // @Router			/reset-password [post]
 // @Summary			Reset user password with verification token
 // @Description		Reset user password with verification token
+// @Tags Auth
 // @Param			body body domain.ResetPassword true	"Reset User Password"
 // @Accept			json
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
+func (app *application) ResetPasswordHandler(ctx *gin.Context) {
 	var req domain.ResetPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -138,7 +128,7 @@ func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 	}
 
 	claims := jwt.MapClaims{}
-	err := h.authService.VerifyAccessToken(ctx, req.AccessToken, &claims)
+	err := app.services.authService.VerifyAccessToken(ctx, req.AccessToken, &claims)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Invalid access token",
@@ -148,7 +138,7 @@ func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 
 	// call user.service to update password
 	email := claims["sub"].(string)
-	user, err := h.userService.GetUserByEmail(ctx, email)
+	user, err := app.services.userService.GetUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
 			ctx.JSON(http.StatusNotFound, gin.H{
@@ -163,7 +153,7 @@ func (h *AuthHandler) ResetPassword(ctx *gin.Context) {
 	}
 
 	ctx.Set("userDNI", user.DNI)
-	if err := h.userService.UpdateUserPassword(ctx, req.Password); err != nil {
+	if err := app.services.userService.UpdateUserPassword(ctx, req.Password); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),
 		})

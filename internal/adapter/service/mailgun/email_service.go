@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"softwareIIbackend/internal/adapter/config"
+	"softwareIIbackend/internal/config"
 	"time"
 
 	"github.com/mailgun/mailgun-go/v4"
