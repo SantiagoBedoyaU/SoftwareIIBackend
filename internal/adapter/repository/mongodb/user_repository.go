@@ -84,6 +84,8 @@ func (r *UserRepository) UpdateUserInformation(ctx context.Context, user *domain
 			"first_name": user.FirstName,
 			"last_name":  user.LastName,
 			"email":      user.Email,
+			"phone":      user.Phone,
+			"address":    user.Address,
 		},
 	}
 
