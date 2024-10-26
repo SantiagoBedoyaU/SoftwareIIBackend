@@ -94,7 +94,7 @@ func (app *application) LoadUserByCSVHandler(ctx *gin.Context) {
 	}
 
 	var users []*domain.User
-	for i := 1; i < len(records); i++ {
+	for i := 0; i < len(records); i++ {
 		typeDNI, err := strconv.Atoi(records[i][0])
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid type of DNI, it should be int"})
