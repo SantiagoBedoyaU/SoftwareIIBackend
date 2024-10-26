@@ -1,4 +1,27 @@
 definitions:
+  domain.Appointment:
+    properties:
+      date_time:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: string
+      patient_id:
+        type: string
+      status:
+        $ref: '#/definitions/domain.AppointmentStatus'
+    type: object
+  domain.AppointmentStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - AppointmentStatusPending
+    - AppointmentStatusCancelled
+    - AppointmentStatusDone
   domain.Auth:
     properties:
       dni:
@@ -100,6 +123,42 @@ info:
   title: Software2Backend
   version: "1.0"
 paths:
+  /appointments:
+    get:
+      consumes:
+      - application/json
+      description: Get appointmentes by date range
+      parameters:
+      - description: Start Date with format YYYY-MM-DD
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date with format YYYY-MM-DD
+        in: query
+        name: end_date
+        required: true
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Appointment'
+            type: array
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Get appointments by date range
+      tags:
+      - Appointment
   /recover-password:
     post:
       consumes:
@@ -122,6 +181,8 @@ paths:
           description: Not Found
           schema: {}
       summary: Recover user password
+      tags:
+      - Auth
   /reset-password:
     post:
       consumes:
@@ -144,6 +205,8 @@ paths:
           description: Not Found
           schema: {}
       summary: Reset user password with verification token
+      tags:
+      - Auth
   /sign-in:
     post:
       consumes:
@@ -166,6 +229,8 @@ paths:
           description: Unauthorized
           schema: {}
       summary: Authenticate user by DNI and Password
+      tags:
+      - Auth
   /users:
     post:
       consumes:
@@ -188,11 +253,14 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
           schema: {}
       summary: Create an regular or admin user
+      tags:
+      - User
   /users/:dni:
     get:
       consumes:
@@ -214,11 +282,14 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
           schema: {}
       summary: Get user by DNI
+      tags:
+      - User
   /users/assign-role:
     patch:
       consumes:
@@ -246,6 +317,8 @@ paths:
           description: Not Found
           schema: {}
       summary: Assign user role by an admin
+      tags:
+      - User
   /users/load-by-csv:
     post:
       consumes:
@@ -272,6 +345,8 @@ paths:
           description: Not Found
           schema: {}
       summary: Load user information by CSV
+      tags:
+      - User
   /users/me:
     get:
       consumes:
@@ -288,11 +363,14 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
           schema: {}
       summary: Get authenticated user information
+      tags:
+      - User
     patch:
       consumes:
       - application/json
@@ -319,6 +397,8 @@ paths:
           description: Not Found
           schema: {}
       summary: Update authenticated user information
+      tags:
+      - User
   /users/reset-password:
     post:
       consumes:
@@ -346,4 +426,6 @@ paths:
           description: Unauthorized
           schema: {}
       summary: Reset the password of an user by DNI
+      tags:
+      - User
 swagger: "2.0"

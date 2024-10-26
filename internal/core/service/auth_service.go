@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"softwareIIbackend/internal/adapter/config"
+	"softwareIIbackend/internal/config"
 	"softwareIIbackend/internal/core/domain"
 	"softwareIIbackend/internal/core/port"
 	"time"

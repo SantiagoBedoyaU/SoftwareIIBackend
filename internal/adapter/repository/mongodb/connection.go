@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"softwareIIbackend/internal/adapter/config"
+	"softwareIIbackend/internal/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
