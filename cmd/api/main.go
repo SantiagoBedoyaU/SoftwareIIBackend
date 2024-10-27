@@ -5,21 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os/signal"
-	"softwareIIbackend/internal/adapter/config"
-	"softwareIIbackend/internal/adapter/handler/api"
-	"softwareIIbackend/internal/adapter/middleware"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
-	"softwareIIbackend/internal/adapter/service/mailgun"
-	"softwareIIbackend/internal/core/service"
+	"softwareIIbackend/internal/config"
 	"syscall"
 	"time"
-
-	"softwareIIbackend/docs"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title					Software2Backend
@@ -39,64 +28,11 @@ func main() {
 		}
 	}()
 
-	router := gin.Default()
-	if err := router.SetTrustedProxies(nil); err != nil {
-		log.Fatalln(err)
-	}
-	router.Use(cors.New(corsConfig()))
-
-	// email service with mailersend
-	emailService := mailgun.NewEmailService(&config.Notification)
-
-	// health
-	healthcheckHandler := api.NewHealtcheckHandler()
-
-	// user
-	userRepo := mongodb.NewUserRepository("users", dbconn)
-	userService := service.NewUserService(userRepo, emailService)
-	userHandler := api.NewUserHandler(userService)
-
-	// auth
-	authService := service.NewAuthService(&config.Auth, emailService)
-	authHandler := api.NewAuthHandler(authService, userService)
-
-	// appointment
-	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
-	appointmentService := service.NewAppointmentService(appointmentRepo)
-	appointmentHandler := api.NewAppointmentHandler(appointmentService)
-
-	// routes
-	router.GET("/health", healthcheckHandler.HealthCheck)
-
-	v1 := router.Group("/api/v1")
-	{
-		v1.POST("/sign-in", authHandler.SignIn)
-		v1.POST("/recover-password", authHandler.RecoverPassword)
-		v1.POST("/reset-password", authHandler.ResetPassword)
-
-		user := v1.Group("/users", middleware.AuthMiddleware(authService))
-		{
-			user.GET("/:dni", userHandler.GetUserByDNI)
-			user.GET("/me", userHandler.GetMyInformation)
-			user.PATCH("/me", userHandler.UpdateMyInformation)
-			user.POST("/", userHandler.CreateUser)
-			user.POST("/load-by-csv", userHandler.LoadUserByCSV)
-			user.POST("/reset-password", userHandler.ResetPassword)
-		}
-		appointment := v1.Group("/appointments", middleware.AuthMiddleware(authService))
-		{
-			appointment.GET("/", appointmentHandler.GetAppointments)
-		}
-
-	}
-
-	docs.SwaggerInfo.BasePath = "/api/v1"
-	docs.SwaggerInfo.Schemes = []string{"http"}
-	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	app := NewApplication(config, dbconn)
 
 	srv := http.Server{
 		Addr:         config.Server.Addr(),
-		Handler:      router,
+		Handler:      app.setupRoutes(),
 		ReadTimeout:  time.Duration(config.Server.ReadTimeout) * time.Second,
 		WriteTimeout: time.Duration(config.Server.WriteTimeout) * time.Second,
 	}
@@ -114,11 +50,4 @@ func main() {
 	if err := srv.Shutdown(context.TODO()); err != nil {
 		log.Fatalln(err)
 	}
-}
-
-func corsConfig() cors.Config {
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AddAllowHeaders("Authorization")
-	corsConfig.AllowAllOrigins = true
-	return corsConfig
 }

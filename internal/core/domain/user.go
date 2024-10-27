@@ -18,7 +18,7 @@ const (
 
 type User struct {
 	ID        string      `json:"id" bson:"_id,omitempty"`
-	TypeDNI   UserTypeDNI `json:"type_dni" bson:"type_dni" binding:"required"`
+	TypeDNI   UserTypeDNI `json:"type_dni" bson:"type_dni"`
 	DNI       string      `json:"dni" bson:"dni" binding:"required"`
 	FirstName string      `json:"first_name" bson:"first_name"  binding:"required"`
 	LastName  string      `json:"last_name" bson:"last_name"`
@@ -52,4 +52,11 @@ type UpdateUser struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
+	Address   string `json:"address"`
+	Phone     string `json:"phone"`
+}
+
+type UpdateRole struct {
+	DNI     string   `json:"dni"`
+	NewRole UserRole `json:"new_role"`
 }

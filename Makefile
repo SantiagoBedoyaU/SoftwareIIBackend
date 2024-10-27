@@ -1,11 +1,9 @@
 run:
-	@go run cmd/api/main.go
-
+	@go run ./cmd/api
 seed:
-	@go run cmd/seed/*.go
-
+	@go run ./cmd/seed
 build:
-	@go build -o ./software2backend ./cmd/api/main.go
+	@go build -o ./software2backend ./cmd/api
 
 swag:
 	@go install github.com/swaggo/swag/cmd/swag@latest

@@ -96,19 +96,49 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, newPassword string
 	return nil
 }
 
-func (s *UserService) UpdateUserInformation(ctx context.Context, firstName, lastName, email string) error {
+func (s *UserService) UpdateUserInformation(ctx context.Context, user *domain.UpdateUser) error {
 	dni := ctx.Value("userDNI").(string)
 	currentUser, err := s.repo.GetUser(ctx, dni)
 	if err != nil {
 		return err
 	}
-	emailUser, err := s.GetUserByEmail(ctx, email)
+	emailUser, err := s.GetUserByEmail(ctx, user.Email)
 	if err == nil && currentUser.ID != emailUser.ID {
 		return domain.ErrUserEmailAlreadyInUse
 	}
 
-	user := domain.User{DNI: dni, FirstName: firstName, LastName: lastName, Email: email}
-	if err := s.repo.UpdateUserInformation(ctx, &user); err != nil {
+	updateUser := domain.User{
+		DNI:       dni,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Address:   user.Address,
+		Phone:     user.Phone,
+	}
+	if err := s.repo.UpdateUserInformation(ctx, &updateUser); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole domain.UserRole) error {
+	role := ctx.Value("userRole").(float64)
+
+	// Only an admin can assign roles
+	if role != float64(domain.AdminRole) {
+		return domain.ErrNotAnAdminRole
+	}
+	user, err := s.repo.GetUser(ctx, dni)
+	if err != nil {
+		return err
+	}
+
+	// Do nothing if the new role it's the same as the old
+	if newRole == user.Role {
+		return nil
+	}
+	updateRole := domain.UpdateRole{DNI: dni, NewRole: newRole}
+	if err := s.repo.UpdateUserRole(ctx, &updateRole); err != nil {
 		return err
 	}
 	return nil
