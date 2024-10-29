@@ -14,6 +14,8 @@ import (
 // @Tags Appointment
 // @Param			start_date query string true	"Start Date with format YYYY-MM-DD"
 // @Param			end_date query string true	"End Date with format YYYY-MM-DD"
+// @Param			doctor_id query string false	"Doctor ID"
+// @Param			patient_id query string false	"Patient ID"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
@@ -22,6 +24,8 @@ import (
 func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 	startDate := ctx.Query("start_date")
 	endDate := ctx.Query("end_date")
+	doctorID := ctx.Query("doctor_id")
+	patientID := ctx.Query("patient_id")
 
 	startTime, err := time.Parse("2006-01-02", startDate)
 	if err != nil {
@@ -37,7 +41,15 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	appointments, err := app.services.appointmentService.GetByDateRange(ctx, startTime, endTime)
+
+	if patientID == "" && doctorID == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "patient_id or doctor_id should be provided",
+		})
+		return
+	}
+
+	appointments, err := app.services.appointmentService.GetByDateRange(ctx, startTime, endTime, doctorID, patientID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": err.Error(),

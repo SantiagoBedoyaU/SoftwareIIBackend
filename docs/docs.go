@@ -45,6 +45,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "Doctor ID",
+                        "name": "doctor_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Patient ID",
+                        "name": "patient_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Authorization Token",
                         "name": "authorization",
                         "in": "header",

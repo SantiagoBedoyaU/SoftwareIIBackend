@@ -7,9 +7,9 @@ import (
 )
 
 type AppoitmentService interface {
-	GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error)
+	GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error)
 }
 
 type AppointmentRepository interface {
-	GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error)
+	GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error)
 }
