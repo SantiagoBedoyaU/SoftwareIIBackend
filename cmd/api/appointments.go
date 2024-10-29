@@ -14,8 +14,8 @@ import (
 // @Tags Appointment
 // @Param			start_date query string true	"Start Date with format YYYY-MM-DD"
 // @Param			end_date query string true	"End Date with format YYYY-MM-DD"
-// @Param			doctor_id query string true	"Doctor ID"
-// @Param			patient_id query string true	"Patient ID"
+// @Param			doctor_id query string false	"Doctor ID"
+// @Param			patient_id query string false	"Patient ID"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
