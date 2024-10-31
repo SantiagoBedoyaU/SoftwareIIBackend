@@ -3,7 +3,7 @@ run:
 seed:
 	@go run ./cmd/seed
 build:
-	@go build -o ./software2backend ./cmd/api
+	@go build -o ./bin/software2backend ./cmd/api
 
 swag:
 	@go install github.com/swaggo/swag/cmd/swag@latest

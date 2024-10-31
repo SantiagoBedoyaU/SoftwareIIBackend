@@ -17,6 +17,6 @@ func NewAppointmentService(appointmentRepository port.AppointmentRepository) *Ap
 	}
 }
 
-func (s *AppointmentService) GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
-	return s.appointmentRepository.GetByDateRange(ctx, startDate, endDate)
+func (s *AppointmentService) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
+	return s.appointmentRepository.GetByDateRange(ctx, startDate, endDate, doctorID, patientID)
 }

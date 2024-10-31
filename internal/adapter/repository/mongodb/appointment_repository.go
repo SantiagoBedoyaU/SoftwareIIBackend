@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"softwareIIbackend/internal/core/domain"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,7 +18,7 @@ func NewAppointmentRepository(collname string, conn *MongoDBConnection) *Appoint
 	return &AppointmentRepository{CollName: collname, conn: conn}
 }
 
-func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
+func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	filter := bson.M{
@@ -28,6 +29,16 @@ func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, e
 			"$lte": endDate,
 		},
 	}
+	doctorID = strings.TrimSpace(doctorID)
+	if doctorID != "" {
+		filter["doctor_id"] = doctorID
+	}
+
+	patientID = strings.TrimSpace(patientID)
+	if patientID != "" {
+		filter["patient_id"] = patientID
+	}
+
 	results, err := coll.Find(ctx, filter)
 	if err != nil {
 		return nil, err

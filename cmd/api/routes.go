@@ -44,17 +44,17 @@ func (app *application) setupRoutes() *gin.Engine {
 		{
 			user := protected.Group("/users")
 			{
+				user.POST("/", app.CreateUserHandler)
 				user.GET("/:dni", app.GetUserByDNIHandler)
 				user.GET("/me", app.GetMyInformationHandler)
 				user.PATCH("/me", app.UpdateMyInformationHandler)
-				user.POST("/", app.CreateUserHandler)
 				user.POST("/load-by-csv", app.LoadUserByCSVHandler)
 				user.POST("/reset-password", app.UpdateUserPasswordHandler)
 				user.PATCH("/assign-role", app.UpdateUserRoleHandler)
 			}
 			appointment := protected.Group("/appointments")
 			{
-				appointment.GET("/", app.GetAppointmentsHandler)
+				appointment.GET("", app.GetAppointmentsHandler)
 			}
 		}
 

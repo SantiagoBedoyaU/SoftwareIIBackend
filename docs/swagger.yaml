@@ -139,6 +139,14 @@ paths:
         name: end_date
         required: true
         type: string
+      - description: Doctor ID
+        in: query
+        name: doctor_id
+        type: string
+      - description: Patient ID
+        in: query
+        name: patient_id
+        type: string
       - description: Authorization Token
         in: header
         name: authorization
