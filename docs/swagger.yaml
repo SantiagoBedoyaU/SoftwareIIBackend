@@ -1,13 +1,15 @@
 definitions:
   domain.Appointment:
     properties:
-      date_time:
-        type: string
       doctor_id:
+        type: string
+      end_date:
         type: string
       id:
         type: string
       patient_id:
+        type: string
+      start_date:
         type: string
       status:
         $ref: '#/definitions/domain.AppointmentStatus'
@@ -179,7 +181,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/domain.User'
+          $ref: '#/definitions/domain.Appointment'
       - description: Authorization Token
         in: header
         name: authorization
@@ -198,7 +200,7 @@ paths:
             type: object
       summary: Create an appointment
       tags:
-      - User
+      - Appointment
   /recover-password:
     post:
       consumes:

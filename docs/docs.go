@@ -92,7 +92,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Appointment"
                 ],
                 "summary": "Create an appointment",
                 "parameters": [
@@ -102,7 +102,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/domain.Appointment"
                         }
                     },
                     {
@@ -568,16 +568,19 @@ const docTemplate = `{
         "domain.Appointment": {
             "type": "object",
             "properties": {
-                "date_time": {
+                "doctor_id": {
                     "type": "string"
                 },
-                "doctor_id": {
+                "end_date": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
                 "patient_id": {
+                    "type": "string"
+                },
+                "start_date": {
                     "type": "string"
                 },
                 "status": {

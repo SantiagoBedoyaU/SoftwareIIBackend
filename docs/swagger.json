@@ -83,7 +83,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Appointment"
                 ],
                 "summary": "Create an appointment",
                 "parameters": [
@@ -93,7 +93,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/domain.Appointment"
                         }
                     },
                     {
@@ -559,16 +559,19 @@
         "domain.Appointment": {
             "type": "object",
             "properties": {
-                "date_time": {
+                "doctor_id": {
                     "type": "string"
                 },
-                "doctor_id": {
+                "end_date": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
                 "patient_id": {
+                    "type": "string"
+                },
+                "start_date": {
                     "type": "string"
                 },
                 "status": {

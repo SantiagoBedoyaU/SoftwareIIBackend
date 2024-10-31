@@ -55,7 +55,7 @@ func (app *application) setupRoutes() *gin.Engine {
 			appointment := protected.Group("/appointments")
 			{
 				appointment.GET("/", app.GetAppointmentsHandler)
-				appointment.POST("/add-appointment", app.GetAppointmentsHandler)
+				appointment.POST("/add-appointment", app.CreateAppointmentHandler)
 			}
 		}
 

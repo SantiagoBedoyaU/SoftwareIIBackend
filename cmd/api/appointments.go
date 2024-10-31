@@ -2,9 +2,8 @@ package main
 
 import (
 	"net/http"
-	"time"
-	"errors"
 	"softwareIIbackend/internal/core/domain"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,12 +60,12 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, appointments)
 }
 
-// CreateAppointment
+// CreateAppointmentHandler
 // @Router			/appointments/add-appointment [post]
 // @Summary			Create an appointment
 // @Description		Create an appointment
-// @Tags User
-// @Param			body body domain.User true	"Appointment Information"
+// @Tags Appointment
+// @Param			body body domain.Appointment true	"Appointment Information"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
@@ -79,11 +78,18 @@ func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
 		return
 	}
 	if err := app.services.appointmentService.CreateAppointment(ctx, &appointment); err != nil {
-		if errors.Is(err, domain.ErrAlreadyHaveAnAppointment) {
-			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-			return
+		errorMap := map[error]int{
+			domain.ErrAlreadyHaveAnAppointment: http.StatusBadRequest,
+			domain.ErrUserNotFound:             http.StatusNotFound,
+			domain.ErrNotAMedicRole:            http.StatusBadRequest,
+			domain.ErrNotValidDates:            http.StatusBadRequest,
 		}
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
+		if statusCode, exists := errorMap[err]; exists {
+			ctx.JSON(statusCode, gin.H{"message": err.Error()})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		return
 	}
 

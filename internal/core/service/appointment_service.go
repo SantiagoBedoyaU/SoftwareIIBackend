@@ -27,13 +27,28 @@ func (s *AppointmentService) GetByDateRange(ctx context.Context, startDate, endD
 }
 
 func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment *domain.Appointment) error {
-	endDate := appointment.DateTime.Add(15 * time.Minute)
+	// we get the user in order to send an email for the new appointment
+	user, err := s.UserService.GetUser(ctx, appointment.PatientID)
+	if err != nil {
+		return err
+	}
+	doctor, err := s.UserService.GetUser(ctx, appointment.DoctorID)
+	if err != nil {
+		return err
+	}
+
+	// we can't allow an appointment with a doctor without the appropiate rol
+	if doctor.Role != domain.MedicRole {
+		return domain.ErrNotAMedicRole
+	}
 	// we can't create two appointments with the same date
-	if _, err := s.appointmentRepository.GetByDateRange(ctx, appointment.DateTime, endDate); err == nil {
+	if appointments, _ := s.appointmentRepository.GetByDateRange(ctx, appointment.StartDate, appointment.EndDate, "", appointment.PatientID); len(appointments) > 0 {
 		return domain.ErrAlreadyHaveAnAppointment
 	}
-	user := s.UserService.GetUser(ctx, dni)
-	_ = s.emailService.SendAppointmentEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, password)
+	if appointment.EndDate.Before(appointment.StartDate) {
+		return domain.ErrNotValidDates
+	}
+	_ = s.emailService.SendAppointmentEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, appointment.StartDate)
 
 	return s.appointmentRepository.CreateAppointment(ctx, appointment)
 }
