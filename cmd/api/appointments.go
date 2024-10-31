@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"time"
+	"errors"
+	"softwareIIbackend/internal/core/domain"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,4 +59,33 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, appointments)
+}
+
+// CreateAppointment
+// @Router			/appointments/add-appointment [post]
+// @Summary			Create an appointment
+// @Description		Create an appointment
+// @Tags User
+// @Param			body body domain.User true	"Appointment Information"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	domain.Appointment
+// @Failure			404	{object}	interface{}
+func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
+	var appointment domain.Appointment
+	if err := ctx.ShouldBindJSON(&appointment); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err := app.services.appointmentService.CreateAppointment(ctx, &appointment); err != nil {
+		if errors.Is(err, domain.ErrAlreadyHaveAnAppointment) {
+			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, appointment)
 }

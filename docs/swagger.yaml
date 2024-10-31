@@ -163,10 +163,42 @@ paths:
             type: array
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get appointments by date range
       tags:
       - Appointment
+  /appointments/add-appointment:
+    post:
+      consumes:
+      - application/json
+      description: Create an appointment
+      parameters:
+      - description: Appointment Information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Appointment'
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Create an appointment
+      tags:
+      - User
   /recover-password:
     post:
       consumes:
@@ -184,10 +216,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Recover user password
       tags:
       - Auth
@@ -208,10 +242,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Reset user password with verification token
       tags:
       - Auth
@@ -232,10 +268,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "401":
           description: Unauthorized
-          schema: {}
+          schema:
+            type: object
       summary: Authenticate user by DNI and Password
       tags:
       - Auth
@@ -265,7 +303,8 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Create an regular or admin user
       tags:
       - User
@@ -294,7 +333,8 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get user by DNI
       tags:
       - User
@@ -320,10 +360,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Assign user role by an admin
       tags:
       - User
@@ -348,10 +390,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Load user information by CSV
       tags:
       - User
@@ -375,7 +419,8 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get authenticated user information
       tags:
       - User
@@ -400,10 +445,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Update authenticated user information
       tags:
       - User
@@ -429,10 +476,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "401":
           description: Unauthorized
-          schema: {}
+          schema:
+            type: object
       summary: Reset the password of an user by DNI
       tags:
       - User

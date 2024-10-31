@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AppointmentRepository struct {
@@ -48,4 +49,12 @@ func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, e
 		return nil, err
 	}
 	return appointments, nil
+}
+
+func (r *AppointmentRepository) CreateAppointment(ctx context.Context, appointment *domain.Appointment) error {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+
+	result, err := coll.InsertOne(ctx, appointment)
+	appointment.ID = result.InsertedID.(primitive.ObjectID).Hex()
+	return err
 }
