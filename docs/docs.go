@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/appointments": {
             "get": {
-                "description": "Get appointmentes by date range",
+                "description": "Get appointments by date range",
                 "consumes": [
                     "application/json"
                 ],
@@ -75,9 +75,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -122,9 +120,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -156,15 +152,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -196,15 +188,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -236,15 +224,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -289,9 +273,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -313,7 +295,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User DNI",
-                        "name": "query-id",
+                        "name": "dni",
                         "in": "path",
                         "required": true
                     },
@@ -334,9 +316,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -375,15 +355,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -420,15 +396,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -464,9 +436,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             },
@@ -503,15 +473,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -550,15 +516,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }

@@ -129,7 +129,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get appointmentes by date range
+      description: Get appointments by date range
       parameters:
       - description: Start Date with format YYYY-MM-DD
         in: query
@@ -165,8 +165,7 @@ paths:
             type: array
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Get appointments by date range
       tags:
       - Appointment
@@ -196,8 +195,7 @@ paths:
             $ref: '#/definitions/domain.Appointment'
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Create an appointment
       tags:
       - Appointment
@@ -218,12 +216,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Recover user password
       tags:
       - Auth
@@ -244,12 +240,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Reset user password with verification token
       tags:
       - Auth
@@ -270,12 +264,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "401":
           description: Unauthorized
-          schema:
-            type: object
+          schema: {}
       summary: Authenticate user by DNI and Password
       tags:
       - Auth
@@ -305,8 +297,7 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Create an regular or admin user
       tags:
       - User
@@ -318,7 +309,7 @@ paths:
       parameters:
       - description: User DNI
         in: path
-        name: query-id
+        name: dni
         required: true
         type: string
       - description: Authorization Token
@@ -335,8 +326,7 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Get user by DNI
       tags:
       - User
@@ -362,12 +352,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Assign user role by an admin
       tags:
       - User
@@ -392,12 +380,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Load user information by CSV
       tags:
       - User
@@ -421,8 +407,7 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Get authenticated user information
       tags:
       - User
@@ -447,12 +432,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            type: object
+          schema: {}
       summary: Update authenticated user information
       tags:
       - User
@@ -478,12 +461,10 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: object
+          schema: {}
         "401":
           description: Unauthorized
-          schema:
-            type: object
+          schema: {}
       summary: Reset the password of an user by DNI
       tags:
       - User

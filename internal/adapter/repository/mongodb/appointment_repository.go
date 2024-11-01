@@ -23,18 +23,25 @@ func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, e
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	filter := bson.M{
-		"$or": []bson.M{
+		"$and": []bson.M{
 			{
-				"start_date": bson.M{"$lt": endDate},
-				"end_date":   bson.M{"$gt": startDate},
+				"$or": []bson.M{
+					{
+						"start_date": bson.M{"$lt": endDate},
+						"end_date":   bson.M{"$gt": startDate},
+					},
+					{
+						"start_date": bson.M{"$lt": endDate},
+						"end_date":   bson.M{"$gt": startDate},
+					},
+					{
+						"start_date": bson.M{"$gte": startDate},
+						"end_date":   bson.M{"$lte": endDate},
+					},
+				},
 			},
 			{
-				"start_date": bson.M{"$lt": endDate},
-				"end_date":   bson.M{"$gt": startDate},
-			},
-			{
-				"start_date": bson.M{"$gte": startDate},
-				"end_date":   bson.M{"$lte": endDate},
+				"status": bson.M{"$ne": domain.AppointmentStatusCancelled},
 			},
 		},
 	}

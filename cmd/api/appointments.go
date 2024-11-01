@@ -11,7 +11,7 @@ import (
 // GetAppointmentsHandler
 // @Router			/appointments [get]
 // @Summary			Get appointments by date range
-// @Description		Get appointmentes by date range
+// @Description		Get appointments by date range
 // @Tags Appointment
 // @Param			start_date query string true	"Start Date with format YYYY-MM-DD"
 // @Param			end_date query string true	"End Date with format YYYY-MM-DD"
