@@ -5,9 +5,11 @@ import (
 	"softwareIIbackend/internal/core/domain"
 	"strings"
 	"time"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type AppointmentRepository struct {
@@ -72,4 +74,26 @@ func (r *AppointmentRepository) CreateAppointment(ctx context.Context, appointme
 	result, err := coll.InsertOne(ctx, appointment)
 	appointment.ID = result.InsertedID.(primitive.ObjectID).Hex()
 	return err
+}
+func (r *AppointmentRepository) CancelAppointment(ctx context.Context, id string) error {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return domain.ErrInvalidIDFormat
+	}
+	
+	filter := bson.D{{Key: "_id", Value: objID}}
+	update := bson.M{
+		"$set": bson.M{
+			"status": domain.AppointmentStatusCancelled,
+		},
+	}
+	_, err = coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return domain.ErrAppointmentNotFound
+		}
+		return err
+	}
+	return nil
 }

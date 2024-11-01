@@ -11,4 +11,6 @@ var (
 	ErrNotAMedicRole            = errors.New("doctorId don't belong to a medic user")
 	ErrAlreadyHaveAnAppointment = errors.New("already have an appointment")
 	ErrNotValidDates            = errors.New("end date must be greater than start date")
+	ErrAppointmentNotFound   	= errors.New("appointment not found")
+	ErrInvalidIDFormat       	= errors.New("id is invalid")
 )

@@ -165,8 +165,39 @@ paths:
             type: array
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get appointments by date range
+      tags:
+      - Appointment
+  /appointments/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Cancel an appointment by an id
+      parameters:
+      - description: Appointment id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Cancel an appointment by an id
       tags:
       - Appointment
   /appointments/add-appointment:
@@ -195,7 +226,8 @@ paths:
             $ref: '#/definitions/domain.Appointment'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Create an appointment
       tags:
       - Appointment
@@ -216,10 +248,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Recover user password
       tags:
       - Auth
@@ -240,10 +274,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Reset user password with verification token
       tags:
       - Auth
@@ -264,10 +300,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "401":
           description: Unauthorized
-          schema: {}
+          schema:
+            type: object
       summary: Authenticate user by DNI and Password
       tags:
       - Auth
@@ -297,11 +335,12 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Create an regular or admin user
       tags:
       - User
-  /users/:dni:
+  /users/{dni}:
     get:
       consumes:
       - application/json
@@ -326,7 +365,8 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get user by DNI
       tags:
       - User
@@ -352,10 +392,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Assign user role by an admin
       tags:
       - User
@@ -380,10 +422,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Load user information by CSV
       tags:
       - User
@@ -407,7 +451,8 @@ paths:
             $ref: '#/definitions/domain.User'
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get authenticated user information
       tags:
       - User
@@ -432,10 +477,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Update authenticated user information
       tags:
       - User
@@ -461,10 +508,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "401":
           description: Unauthorized
-          schema: {}
+          schema:
+            type: object
       summary: Reset the password of an user by DNI
       tags:
       - User

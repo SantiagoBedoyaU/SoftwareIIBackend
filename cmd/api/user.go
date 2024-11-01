@@ -11,7 +11,7 @@ import (
 )
 
 // GetUserByDNIHandler
-// @Router			/users/:dni [get]
+// @Router			/users/{dni} [get]
 // @Summary			Get user by DNI
 // @Description		Get user by DNI
 // @Tags User
