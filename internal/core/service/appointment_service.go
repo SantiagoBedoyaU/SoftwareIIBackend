@@ -52,3 +52,7 @@ func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment 
 
 	return s.appointmentRepository.CreateAppointment(ctx, appointment)
 }
+
+func (s *AppointmentService) CancelAppointment(ctx context.Context, id string) error {
+	return s.appointmentRepository.CancelAppointment(ctx, id)
+}

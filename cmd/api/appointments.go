@@ -95,3 +95,37 @@ func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, appointment)
 }
+
+// CancelAppointmentHandler
+// @Router			/appointments/{id} [patch]
+// @Summary			Cancel an appointment by an id
+// @Description		Cancel an appointment by an id
+// @Tags Appointment
+// @Param			id path string true	"Appointment id"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}  	interface{}
+// @Failure			404	{object}	interface{}
+func (app *application) CancelAppointmentHandler(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if err := app.services.appointmentService.CancelAppointment(ctx, id); err != nil {
+		if err == domain.ErrAppointmentNotFound {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+		if err == domain.ErrInvalidIDFormat {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"message": err.Error(),
+			})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.Status(http.StatusNoContent)
+}
