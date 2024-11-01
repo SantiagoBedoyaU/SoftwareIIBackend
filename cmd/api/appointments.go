@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"softwareIIbackend/internal/core/domain"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 // GetAppointmentsHandler
 // @Router			/appointments [get]
 // @Summary			Get appointments by date range
-// @Description		Get appointmentes by date range
+// @Description		Get appointments by date range
 // @Tags Appointment
 // @Param			start_date query string true	"Start Date with format YYYY-MM-DD"
 // @Param			end_date query string true	"End Date with format YYYY-MM-DD"
@@ -57,4 +58,40 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, appointments)
+}
+
+// CreateAppointmentHandler
+// @Router			/appointments/add-appointment [post]
+// @Summary			Create an appointment
+// @Description		Create an appointment
+// @Tags Appointment
+// @Param			body body domain.Appointment true	"Appointment Information"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	domain.Appointment
+// @Failure			404	{object}	interface{}
+func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
+	var appointment domain.Appointment
+	if err := ctx.ShouldBindJSON(&appointment); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err := app.services.appointmentService.CreateAppointment(ctx, &appointment); err != nil {
+		errorMap := map[error]int{
+			domain.ErrAlreadyHaveAnAppointment: http.StatusBadRequest,
+			domain.ErrUserNotFound:             http.StatusNotFound,
+			domain.ErrNotAMedicRole:            http.StatusBadRequest,
+			domain.ErrNotValidDates:            http.StatusBadRequest,
+		}
+
+		if statusCode, exists := errorMap[err]; exists {
+			ctx.JSON(statusCode, gin.H{"message": err.Error()})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, appointment)
 }

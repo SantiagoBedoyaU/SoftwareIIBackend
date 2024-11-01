@@ -30,7 +30,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 	authService := service.NewAuthService(&config.Auth, emailService)
 	// appointment
 	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
-	appointmentService := service.NewAppointmentService(appointmentRepo)
+	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
 
 	app := &application{
 		config: config,

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AppointmentRepository struct {
@@ -22,11 +23,26 @@ func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, e
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	filter := bson.M{
-		"start_date": bson.M{
-			"$gte": startDate,
-		},
-		"end_date": bson.M{
-			"$lte": endDate,
+		"$and": []bson.M{
+			{
+				"$or": []bson.M{
+					{
+						"start_date": bson.M{"$lt": endDate},
+						"end_date":   bson.M{"$gt": startDate},
+					},
+					{
+						"start_date": bson.M{"$lt": endDate},
+						"end_date":   bson.M{"$gt": startDate},
+					},
+					{
+						"start_date": bson.M{"$gte": startDate},
+						"end_date":   bson.M{"$lte": endDate},
+					},
+				},
+			},
+			{
+				"status": bson.M{"$ne": domain.AppointmentStatusCancelled},
+			},
 		},
 	}
 	doctorID = strings.TrimSpace(doctorID)
@@ -48,4 +64,12 @@ func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, e
 		return nil, err
 	}
 	return appointments, nil
+}
+
+func (r *AppointmentRepository) CreateAppointment(ctx context.Context, appointment *domain.Appointment) error {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+
+	result, err := coll.InsertOne(ctx, appointment)
+	appointment.ID = result.InsertedID.(primitive.ObjectID).Hex()
+	return err
 }

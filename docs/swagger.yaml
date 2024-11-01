@@ -1,13 +1,15 @@
 definitions:
   domain.Appointment:
     properties:
-      date_time:
-        type: string
       doctor_id:
+        type: string
+      end_date:
         type: string
       id:
         type: string
       patient_id:
+        type: string
+      start_date:
         type: string
       status:
         $ref: '#/definitions/domain.AppointmentStatus'
@@ -127,7 +129,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get appointmentes by date range
+      description: Get appointments by date range
       parameters:
       - description: Start Date with format YYYY-MM-DD
         in: query
@@ -165,6 +167,36 @@ paths:
           description: Not Found
           schema: {}
       summary: Get appointments by date range
+      tags:
+      - Appointment
+  /appointments/add-appointment:
+    post:
+      consumes:
+      - application/json
+      description: Create an appointment
+      parameters:
+      - description: Appointment Information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Appointment'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Appointment'
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Create an appointment
       tags:
       - Appointment
   /recover-password:
@@ -277,7 +309,7 @@ paths:
       parameters:
       - description: User DNI
         in: path
-        name: query-id
+        name: dni
         required: true
         type: string
       - description: Authorization Token
