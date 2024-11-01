@@ -75,9 +75,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -122,9 +120,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -161,15 +157,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -201,15 +193,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -241,15 +229,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -281,15 +265,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -334,9 +314,58 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "description": "Get appointments by role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get users by role",
+                "parameters": [
+                    {
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "type": "object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.User"
+                            }
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
                     }
                 }
             }
@@ -375,15 +404,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -420,15 +445,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -464,9 +485,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             },
@@ -503,15 +522,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -550,15 +565,11 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
@@ -601,9 +612,7 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "type": "object"
-                        }
+                        "schema": {}
                     }
                 }
             }
