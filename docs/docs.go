@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/appointments": {
             "get": {
-                "description": "Get appointmentes by date range",
+                "description": "Get appointments by date range",
                 "consumes": [
                     "application/json"
                 ],
@@ -71,6 +71,51 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/domain.Appointment"
                             }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/appointments/add-appointment": {
+            "post": {
+                "description": "Create an appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointment"
+                ],
+                "summary": "Create an appointment",
+                "parameters": [
+                    {
+                        "description": "Appointment Information",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Appointment"
                         }
                     },
                     "404": {
@@ -250,7 +295,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User DNI",
-                        "name": "query-id",
+                        "name": "dni",
                         "in": "path",
                         "required": true
                     },
@@ -485,16 +530,19 @@ const docTemplate = `{
         "domain.Appointment": {
             "type": "object",
             "properties": {
-                "date_time": {
+                "doctor_id": {
                     "type": "string"
                 },
-                "doctor_id": {
+                "end_date": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
                 "patient_id": {
+                    "type": "string"
+                },
+                "start_date": {
                     "type": "string"
                 },
                 "status": {
