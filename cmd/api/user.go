@@ -243,3 +243,35 @@ func (app *application) UpdateUserRoleHandler(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusNoContent)
 }
+
+// GetUsersByRoleHandler
+// @Router			/users/ [get]
+// @Summary			Get users by role
+// @Description		Get appointments by role
+// @Tags User
+// @Param			role query domain.UserRole true	"Role ID"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	[]domain.User
+// @Failure			404	{object}	interface{}
+func (app *application) GetUsersByRoleHandler(ctx *gin.Context) {
+	role := ctx.Query("role")
+	if role == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "role query param must be provided"})
+		return
+	}
+	roleInt, err := strconv.Atoi(role)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "role query param must be a number"})
+		return
+	}
+	users, err := app.services.userService.GetUsersByRole(ctx, domain.UserRole(roleInt))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, users)
+}

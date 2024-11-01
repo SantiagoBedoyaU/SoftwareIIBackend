@@ -143,3 +143,7 @@ func (s *UserService) UpdateUserRole(ctx context.Context, dni string, newRole do
 	}
 	return nil
 }
+
+func (s *UserService) GetUsersByRole(ctx context.Context, role domain.UserRole) ([]domain.User, error) {
+	return s.repo.GetUsersByRole(ctx, role)
+}
