@@ -15,7 +15,7 @@ import (
 // @Summary			Get user by DNI
 // @Description		Get user by DNI
 // @Tags User
-// @Param			query-id path string true	"User DNI"
+// @Param			dni path string true	"User DNI"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
