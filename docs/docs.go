@@ -801,11 +801,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "useless-ayn-santiagobedoya-423a6091.koyeb.app",
-	BasePath:         "/api/v1",
-	Schemes:          []string{"https", "http"},
+	Host:             "",
+	BasePath:         "",
+	Schemes:          []string{},
 	Title:            "Software2Backend",
-	Description:      "API para el backend de Software2",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

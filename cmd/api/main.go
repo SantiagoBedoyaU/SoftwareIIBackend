@@ -13,10 +13,6 @@ import (
 
 // @title					Software2Backend
 // @version					1.0
-// @description				API para el backend de Software2
-// @schemes         		https http
-// @host 					useless-ayn-santiagobedoya-423a6091.koyeb.app
-// @BasePath				/api/v1
 func main() {
 	config := config.New()
 

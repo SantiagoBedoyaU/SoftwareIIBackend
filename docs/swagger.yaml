@@ -1,4 +1,3 @@
-basePath: /api/v1
 definitions:
   domain.Appointment:
     properties:
@@ -121,10 +120,8 @@ definitions:
     - TypeDniCC
     - TypeDniTI
     - TypeDniTP
-host: useless-ayn-santiagobedoya-423a6091.koyeb.app
 info:
   contact: {}
-  description: API para el backend de Software2
   title: Software2Backend
   version: "1.0"
 paths:
@@ -533,7 +530,4 @@ paths:
       summary: Reset the password of an user by DNI
       tags:
       - User
-schemes:
-- https
-- http
 swagger: "2.0"

@@ -1,17 +1,10 @@
 {
-    "schemes": [
-        "https",
-        "http"
-    ],
     "swagger": "2.0",
     "info": {
-        "description": "API para el backend de Software2",
         "title": "Software2Backend",
         "contact": {},
         "version": "1.0"
     },
-    "host": "useless-ayn-santiagobedoya-423a6091.koyeb.app",
-    "basePath": "/api/v1",
     "paths": {
         "/appointments": {
             "get": {
