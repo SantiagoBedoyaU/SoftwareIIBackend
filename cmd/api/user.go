@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"softwareIIbackend/internal/core/domain"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -100,7 +101,7 @@ func (app *application) LoadUserByCSVHandler(ctx *gin.Context) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid type of DNI, it should be int"})
 			return
 		}
-		role, err := strconv.Atoi(records[i][5])
+		role, err := strconv.Atoi(strings.TrimSpace(records[i][5]))
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid role, it should be int"})
 			return

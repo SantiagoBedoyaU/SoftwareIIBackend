@@ -13,6 +13,8 @@ import (
 
 // @title					Software2Backend
 // @version					1.0
+// @description				API para el backend de Software2
+// @schemes         		http https
 func main() {
 	config := config.New()
 

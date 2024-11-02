@@ -1,6 +1,11 @@
 {
+    "schemes": [
+        "http",
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
+        "description": "API para el backend de Software2",
         "title": "Software2Backend",
         "contact": {},
         "version": "1.0"

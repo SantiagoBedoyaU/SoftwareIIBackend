@@ -122,6 +122,7 @@ definitions:
     - TypeDniTP
 info:
   contact: {}
+  description: API para el backend de Software2
   title: Software2Backend
   version: "1.0"
 paths:
@@ -530,4 +531,7 @@ paths:
       summary: Reset the password of an user by DNI
       tags:
       - User
+schemes:
+- http
+- https
 swagger: "2.0"
