@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"softwareIIbackend/internal/core/port"
 	"strings"
 
@@ -14,18 +15,25 @@ func AuthMiddleware(authService port.AuthService) gin.HandlerFunc {
 		bearerToken := ctx.GetHeader("authorization")
 		parts := strings.Split(bearerToken, "Bearer ")
 		if len(parts) < 2 {
-			ctx.JSON(401, gin.H{"error": "invalid token"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": http.StatusText(http.StatusUnauthorized),
+			})
+			return
 		}
 		jwtToken := parts[1]
 		if jwtToken == "" {
-			ctx.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": http.StatusText(http.StatusUnauthorized),
+			})
 			return
 		}
 
 		// validate jwt token
 		claims := jwt.MapClaims{}
 		if err := authService.VerifyAccessToken(ctx, jwtToken, &claims); err != nil {
-			ctx.AbortWithStatusJSON(401, gin.H{"message": "Unauthorized"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": http.StatusText(http.StatusUnauthorized),
+			})
 			return
 		}
 
