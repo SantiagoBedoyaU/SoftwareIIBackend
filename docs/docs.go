@@ -78,9 +78,7 @@ const docTemplate = `{
                         "schema": {}
                     }
                 }
-            }
-        },
-        "/appointments/add-appointment": {
+            },
             "post": {
                 "description": "Create an appointment",
                 "consumes": [

@@ -169,35 +169,6 @@ paths:
       summary: Get appointments by date range
       tags:
       - Appointment
-  /appointments/{id}:
-    patch:
-      consumes:
-      - application/json
-      description: Cancel an appointment by an id
-      parameters:
-      - description: Appointment id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Authorization Token
-        in: header
-        name: authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema: {}
-        "404":
-          description: Not Found
-          schema: {}
-      summary: Cancel an appointment by an id
-      tags:
-      - Appointment
-  /appointments/add-appointment:
     post:
       consumes:
       - application/json
@@ -225,6 +196,34 @@ paths:
           description: Not Found
           schema: {}
       summary: Create an appointment
+      tags:
+      - Appointment
+  /appointments/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Cancel an appointment by an id
+      parameters:
+      - description: Appointment id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Cancel an appointment by an id
       tags:
       - Appointment
   /recover-password:

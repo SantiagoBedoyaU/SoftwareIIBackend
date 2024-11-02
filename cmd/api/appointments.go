@@ -61,7 +61,7 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 }
 
 // CreateAppointmentHandler
-// @Router			/appointments/add-appointment [post]
+// @Router			/appointments [post]
 // @Summary			Create an appointment
 // @Description		Create an appointment
 // @Tags Appointment
