@@ -1,7 +1,7 @@
 {
     "schemes": [
-        "http",
-        "https"
+        "https",
+        "http"
     ],
     "swagger": "2.0",
     "info": {
@@ -10,6 +10,8 @@
         "contact": {},
         "version": "1.0"
     },
+    "host": "useless-ayn-santiagobedoya-423a6091.koyeb.app",
+    "basePath": "/api/v1",
     "paths": {
         "/appointments": {
             "get": {
