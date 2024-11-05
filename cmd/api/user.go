@@ -6,12 +6,13 @@ import (
 	"net/http"
 	"softwareIIbackend/internal/core/domain"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 // GetUserByDNIHandler
-// @Router			/users/:dni [get]
+// @Router			/users/{dni} [get]
 // @Summary			Get user by DNI
 // @Description		Get user by DNI
 // @Tags User
@@ -100,7 +101,7 @@ func (app *application) LoadUserByCSVHandler(ctx *gin.Context) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid type of DNI, it should be int"})
 			return
 		}
-		role, err := strconv.Atoi(records[i][5])
+		role, err := strconv.Atoi(strings.TrimSpace(records[i][5]))
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid role, it should be int"})
 			return
@@ -242,4 +243,36 @@ func (app *application) UpdateUserRoleHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.Status(http.StatusNoContent)
+}
+
+// GetUsersByRoleHandler
+// @Router			/users/ [get]
+// @Summary			Get users by role
+// @Description		Get appointments by role
+// @Tags User
+// @Param			role query domain.UserRole true	"Role ID"
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	[]domain.User
+// @Failure			404	{object}	interface{}
+func (app *application) GetUsersByRoleHandler(ctx *gin.Context) {
+	role := ctx.Query("role")
+	if role == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "role query param must be provided"})
+		return
+	}
+	roleInt, err := strconv.Atoi(role)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "role query param must be a number"})
+		return
+	}
+	users, err := app.services.userService.GetUsersByRole(ctx, domain.UserRole(roleInt))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, users)
 }

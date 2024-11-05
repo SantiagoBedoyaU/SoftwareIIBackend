@@ -44,7 +44,8 @@ func (app *application) setupRoutes() *gin.Engine {
 		{
 			user := protected.Group("/users")
 			{
-				user.POST("/", app.CreateUserHandler)
+				user.POST("", app.CreateUserHandler)
+				user.GET("", app.GetUsersByRoleHandler)
 				user.GET("/:dni", app.GetUserByDNIHandler)
 				user.GET("/me", app.GetMyInformationHandler)
 				user.PATCH("/me", app.UpdateMyInformationHandler)
@@ -54,8 +55,9 @@ func (app *application) setupRoutes() *gin.Engine {
 			}
 			appointment := protected.Group("/appointments")
 			{
-				appointment.GET("/", app.GetAppointmentsHandler)
-				appointment.POST("/add-appointment", app.CreateAppointmentHandler)
+				appointment.GET("", app.GetAppointmentsHandler)
+				appointment.POST("", app.CreateAppointmentHandler)
+				appointment.PATCH("/:id", app.CancelAppointmentHandler)
 			}
 		}
 

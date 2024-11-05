@@ -41,6 +41,8 @@ func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment 
 	if doctor.Role != domain.MedicRole {
 		return domain.ErrNotAMedicRole
 	}
+	endDate := appointment.StartDate.Add(15 * time.Minute)
+	appointment.EndDate = endDate
 	// we can't create two appointments with the same date
 	if appointments, _ := s.appointmentRepository.GetByDateRange(ctx, appointment.StartDate, appointment.EndDate, "", appointment.PatientID); len(appointments) > 0 {
 		return domain.ErrAlreadyHaveAnAppointment
@@ -51,4 +53,8 @@ func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment 
 	_ = s.emailService.SendAppointmentEmail(ctx, fmt.Sprintf("%s %s", user.FirstName, user.LastName), user.Email, appointment.StartDate)
 
 	return s.appointmentRepository.CreateAppointment(ctx, appointment)
+}
+
+func (s *AppointmentService) CancelAppointment(ctx context.Context, id string) error {
+	return s.appointmentRepository.CancelAppointment(ctx, id)
 }

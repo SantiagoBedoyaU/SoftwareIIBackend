@@ -118,3 +118,23 @@ func (r *UserRepository) UpdateUserRole(ctx context.Context, updateRole *domain.
 	}
 	return nil
 }
+
+func (r *UserRepository) GetUsersByRole(ctx context.Context, role domain.UserRole) ([]domain.User, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	filter := bson.D{{Key: "role", Value: role}}
+	cur, err := coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(ctx)
+	users := make([]domain.User, 0)
+	for cur.Next(ctx) {
+		var user domain.User
+		err := cur.Decode(&user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}

@@ -78,9 +78,7 @@ const docTemplate = `{
                         "schema": {}
                     }
                 }
-            }
-        },
-        "/appointments/add-appointment": {
+            },
             "post": {
                 "description": "Create an appointment",
                 "consumes": [
@@ -117,6 +115,47 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.Appointment"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/appointments/{id}": {
+            "patch": {
+                "description": "Cancel an appointment by an id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointment"
+                ],
+                "summary": "Cancel an appointment by an id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Appointment id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {}
                     },
                     "404": {
                         "description": "Not Found",
@@ -278,9 +317,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/:dni": {
+        "/users/": {
             "get": {
-                "description": "Get user by DNI",
+                "description": "Get appointments by role",
                 "consumes": [
                     "application/json"
                 ],
@@ -290,13 +329,18 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Get user by DNI",
+                "summary": "Get users by role",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "User DNI",
-                        "name": "dni",
-                        "in": "path",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "role",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -311,7 +355,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.User"
+                            }
                         }
                     },
                     "404": {
@@ -520,6 +567,49 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/users/{dni}": {
+            "get": {
+                "description": "Get user by DNI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by DNI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User DNI",
+                        "name": "dni",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {}
                     }
                 }
