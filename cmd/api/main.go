@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os/signal"
+	"softwareIIbackend/cmd/api/cronjobs"
 	"softwareIIbackend/internal/adapter/repository/mongodb"
 	"softwareIIbackend/internal/config"
 	"syscall"
@@ -30,6 +31,17 @@ func main() {
 
 	app := NewApplication(config, dbconn)
 
+	err = cronjobs.NotificationCronJob(
+		ctx,
+		app.scheduler,
+		app.services.appointmentService,
+		app.services.emailService,
+		app.services.userService,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	srv := http.Server{
 		Addr:         config.Server.Addr(),
 		Handler:      app.setupRoutes(),
@@ -39,6 +51,8 @@ func main() {
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	go func() {
+		log.Println("Starting scheduler")
+		app.scheduler.Start()
 		log.Printf("Server is running on %v", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil {
 			log.Fatalln(err)
@@ -47,6 +61,9 @@ func main() {
 
 	<-ctx.Done()
 	log.Println("shutting down...")
+	if err := app.scheduler.Shutdown(); err != nil {
+		log.Fatalln(err)
+	}
 	if err := srv.Shutdown(context.TODO()); err != nil {
 		log.Fatalln(err)
 	}

@@ -6,6 +6,8 @@ import (
 	"softwareIIbackend/internal/config"
 	"softwareIIbackend/internal/core/port"
 	"softwareIIbackend/internal/core/service"
+
+	"github.com/go-co-op/gocron/v2"
 )
 
 type services struct {
@@ -16,8 +18,9 @@ type services struct {
 }
 
 type application struct {
-	config   *config.Config
-	services services
+	config    *config.Config
+	services  services
+	scheduler gocron.Scheduler
 }
 
 func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *application {
@@ -32,6 +35,12 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
 	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
 
+	// scheduler
+	scheduler, err := gocron.NewScheduler()
+	if err != nil {
+		panic(err)
+	}
+
 	app := &application{
 		config: config,
 		services: services{
@@ -40,6 +49,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 			authService:        authService,
 			appointmentService: appointmentService,
 		},
+		scheduler: scheduler,
 	}
 	return app
 }
