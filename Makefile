@@ -14,4 +14,8 @@ swag:
 test:
 	@go test ./... -v
 
+test-coverage:
+	@go test ./... -coverprofile=coverage.out -covermode=atomic -v
+	@go tool cover -func=coverage.out
+
 .PHONY: run seed build swag test
