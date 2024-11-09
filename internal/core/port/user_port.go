@@ -5,6 +5,8 @@ import (
 	"softwareIIbackend/internal/core/domain"
 )
 
+//go:generate mockgen -source=user_port.go -destination=mocks/mock_user_port.go -typed
+
 type UserService interface {
 	GetUser(ctx context.Context, DNI string) (*domain.User, error)
 	GetUsersByRole(ctx context.Context, role domain.UserRole) ([]domain.User, error)
