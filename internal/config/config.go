@@ -50,9 +50,14 @@ func New() *Config {
 	}
 
 	cfg := &Config{}
+	var err error
 
 	cfg.Server.Host = os.Getenv("SERVER_HOST")
-	cfg.Server.Port, _ = strconv.Atoi(os.Getenv("SERVER_PORT"))
+	cfg.Server.Port, err = strconv.Atoi(os.Getenv("SERVER_PORT"))
+	if err != nil {
+		// default port in case of error
+		cfg.Server.Port = 8080
+	}
 	cfg.Server.ReadTimeout, _ = strconv.Atoi(os.Getenv("SERVER_READ_TIMEOUT"))
 	cfg.Server.WriteTimeout, _ = strconv.Atoi(os.Getenv("SERVER_WRITE_TIMEOUT"))
 
