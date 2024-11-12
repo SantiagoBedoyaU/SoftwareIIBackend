@@ -6,6 +6,7 @@ import (
 	"softwareIIbackend/docs"
 	"time"
 
+	helmet "github.com/danielkov/gin-helmet"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -26,6 +27,7 @@ func corsConfig() cors.Config {
 
 func (app *application) setupRoutes() *gin.Engine {
 	router := gin.Default()
+	router.Use(helmet.Default())
 	if err := router.SetTrustedProxies(nil); err != nil {
 		log.Fatalln(err)
 	}
