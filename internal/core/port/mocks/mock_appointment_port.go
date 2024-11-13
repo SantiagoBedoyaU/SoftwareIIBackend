@@ -157,6 +157,45 @@ func (c *MockAppoitmentServiceGetByDateRangeCall) DoAndReturn(f func(context.Con
 	return c
 }
 
+// GetHistoryByUser mocks base method.
+func (m *MockAppoitmentService) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetHistoryByUser", ctx, userDNI)
+	ret0, _ := ret[0].([]domain.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetHistoryByUser indicates an expected call of GetHistoryByUser.
+func (mr *MockAppoitmentServiceMockRecorder) GetHistoryByUser(ctx, userDNI any) *MockAppoitmentServiceGetHistoryByUserCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetHistoryByUser", reflect.TypeOf((*MockAppoitmentService)(nil).GetHistoryByUser), ctx, userDNI)
+	return &MockAppoitmentServiceGetHistoryByUserCall{Call: call}
+}
+
+// MockAppoitmentServiceGetHistoryByUserCall wrap *gomock.Call
+type MockAppoitmentServiceGetHistoryByUserCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppoitmentServiceGetHistoryByUserCall) Return(arg0 []domain.Appointment, arg1 error) *MockAppoitmentServiceGetHistoryByUserCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppoitmentServiceGetHistoryByUserCall) Do(f func(context.Context, string) ([]domain.Appointment, error)) *MockAppoitmentServiceGetHistoryByUserCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppoitmentServiceGetHistoryByUserCall) DoAndReturn(f func(context.Context, string) ([]domain.Appointment, error)) *MockAppoitmentServiceGetHistoryByUserCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
 // MockAppointmentRepository is a mock of AppointmentRepository interface.
 type MockAppointmentRepository struct {
 	ctrl     *gomock.Controller
@@ -292,6 +331,45 @@ func (c *MockAppointmentRepositoryGetByDateRangeCall) Do(f func(context.Context,
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
 func (c *MockAppointmentRepositoryGetByDateRangeCall) DoAndReturn(f func(context.Context, time.Time, time.Time, string, string) ([]domain.Appointment, error)) *MockAppointmentRepositoryGetByDateRangeCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// GetHistoryByUser mocks base method.
+func (m *MockAppointmentRepository) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetHistoryByUser", ctx, userDNI)
+	ret0, _ := ret[0].([]domain.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetHistoryByUser indicates an expected call of GetHistoryByUser.
+func (mr *MockAppointmentRepositoryMockRecorder) GetHistoryByUser(ctx, userDNI any) *MockAppointmentRepositoryGetHistoryByUserCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetHistoryByUser", reflect.TypeOf((*MockAppointmentRepository)(nil).GetHistoryByUser), ctx, userDNI)
+	return &MockAppointmentRepositoryGetHistoryByUserCall{Call: call}
+}
+
+// MockAppointmentRepositoryGetHistoryByUserCall wrap *gomock.Call
+type MockAppointmentRepositoryGetHistoryByUserCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppointmentRepositoryGetHistoryByUserCall) Return(arg0 []domain.Appointment, arg1 error) *MockAppointmentRepositoryGetHistoryByUserCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppointmentRepositoryGetHistoryByUserCall) Do(f func(context.Context, string) ([]domain.Appointment, error)) *MockAppointmentRepositoryGetHistoryByUserCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppointmentRepositoryGetHistoryByUserCall) DoAndReturn(f func(context.Context, string) ([]domain.Appointment, error)) *MockAppointmentRepositoryGetHistoryByUserCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
