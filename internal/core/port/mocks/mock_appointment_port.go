@@ -42,6 +42,44 @@ func (m *MockAppoitmentService) EXPECT() *MockAppoitmentServiceMockRecorder {
 	return m.recorder
 }
 
+// AddAppointmentProcedure mocks base method.
+func (m *MockAppoitmentService) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, procedure)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddAppointmentProcedure indicates an expected call of AddAppointmentProcedure.
+func (mr *MockAppoitmentServiceMockRecorder) AddAppointmentProcedure(ctx, appointmentID, procedure any) *MockAppoitmentServiceAddAppointmentProcedureCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppoitmentService)(nil).AddAppointmentProcedure), ctx, appointmentID, procedure)
+	return &MockAppoitmentServiceAddAppointmentProcedureCall{Call: call}
+}
+
+// MockAppoitmentServiceAddAppointmentProcedureCall wrap *gomock.Call
+type MockAppoitmentServiceAddAppointmentProcedureCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppoitmentServiceAddAppointmentProcedureCall) Return(arg0 error) *MockAppoitmentServiceAddAppointmentProcedureCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppoitmentServiceAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.Procedure) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppoitmentServiceAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.Procedure) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
 // CancelAppointment mocks base method.
 func (m *MockAppoitmentService) CancelAppointment(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
@@ -179,6 +217,44 @@ func NewMockAppointmentRepository(ctrl *gomock.Controller) *MockAppointmentRepos
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockAppointmentRepository) EXPECT() *MockAppointmentRepositoryMockRecorder {
 	return m.recorder
+}
+
+// AddAppointmentProcedure mocks base method.
+func (m *MockAppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, procedure)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddAppointmentProcedure indicates an expected call of AddAppointmentProcedure.
+func (mr *MockAppointmentRepositoryMockRecorder) AddAppointmentProcedure(ctx, appointmentID, procedure any) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppointmentRepository)(nil).AddAppointmentProcedure), ctx, appointmentID, procedure)
+	return &MockAppointmentRepositoryAddAppointmentProcedureCall{Call: call}
+}
+
+// MockAppointmentRepositoryAddAppointmentProcedureCall wrap *gomock.Call
+type MockAppointmentRepositoryAddAppointmentProcedureCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) Return(arg0 error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+	c.Call = c.Call.Return(arg0)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.Procedure) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.Procedure) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
 }
 
 // CancelAppointment mocks base method.

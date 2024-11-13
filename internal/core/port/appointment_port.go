@@ -10,12 +10,14 @@ import (
 
 type AppoitmentService interface {
 	GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error)
+	AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error
 	CreateAppointment(ctx context.Context, appointment *domain.Appointment) error
 	CancelAppointment(ctx context.Context, id string) error
 }
 
 type AppointmentRepository interface {
 	GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error)
+	AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error
 	CreateAppointment(ctx context.Context, appointment *domain.Appointment) error
 	CancelAppointment(ctx context.Context, id string) error
 }
