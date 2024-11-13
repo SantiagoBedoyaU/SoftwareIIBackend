@@ -16,5 +16,11 @@ func (app *application) AddAppointmentProcedureHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	app.services.appointmentService.AddAppointmentProcedure(ctx, appointmentID, req)
+	if err := app.services.appointmentService.AddAppointmentProcedure(ctx, appointmentID, req); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.Status(http.StatusAccepted)
 }
