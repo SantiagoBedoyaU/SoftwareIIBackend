@@ -1,21 +1,32 @@
 run:
-	@go run ./cmd/api
+	go run ./cmd/api
 
 seed:
-	@go run ./cmd/seed
+	go run ./cmd/seed
 
 build:
-	@go build -o ./bin/software2backend ./cmd/api
+	go build -o ./bin/software2backend ./cmd/api
 
 swag:
-	@go install github.com/swaggo/swag/cmd/swag@latest
-	@swag init -g cmd/api/main.go
+	go install github.com/swaggo/swag/cmd/swag@latest
+	swag init -g cmd/api/main.go
 
 test:
-	@go test ./... -v
+	go test ./... -v
 
 test-coverage:
-	@go test ./... -coverprofile=coverage.out -covermode=atomic -v
-	@go tool cover -func=coverage.out
+	go test ./... -coverprofile=coverage.out -covermode=atomic -v
+	go tool cover -func=coverage.out
 
-.PHONY: run seed build swag test
+audit:
+	go mod tidy
+	go mod verify
+	go fmt ./...
+	go vet ./...
+	staticcheck ./...
+	go test -race -vet=off ./...
+
+generate:
+	go generate ./...
+
+.PHONY: run seed build swag test audit generate

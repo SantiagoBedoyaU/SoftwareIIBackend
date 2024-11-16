@@ -61,6 +61,7 @@ func (app *application) setupRoutes() *gin.Engine {
 				appointment.POST("", app.CreateAppointmentHandler)
 				appointment.GET("/my-history", app.GetAppointmentsHistoryHandler)
 				appointment.PATCH("/:id", app.CancelAppointmentHandler)
+				appointment.PATCH("/:id/add-procedure", app.AddAppointmentProcedureHandler)
 			}
 		}
 

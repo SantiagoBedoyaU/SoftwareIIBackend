@@ -21,6 +21,28 @@ func NewAppointmentRepository(collname string, conn *MongoDBConnection) *Appoint
 	return &AppointmentRepository{CollName: collname, conn: conn}
 }
 
+func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	objID, err := primitive.ObjectIDFromHex(appointmentID)
+	if err != nil {
+		return domain.ErrInvalidIDFormat
+	}
+	filter := bson.M{"_id": objID}
+	update := bson.M{
+		"$push": bson.M{
+			"procedures": procedure,
+		},
+	}
+	_, err = coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return domain.ErrAppointmentNotFound
+		}
+		return err
+	}
+	return nil
+}
+
 func (r *AppointmentRepository) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 	now := time.Now()
@@ -95,6 +117,7 @@ func (r *AppointmentRepository) CreateAppointment(ctx context.Context, appointme
 	appointment.ID = result.InsertedID.(primitive.ObjectID).Hex()
 	return err
 }
+
 func (r *AppointmentRepository) CancelAppointment(ctx context.Context, id string) error {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 	objID, err := primitive.ObjectIDFromHex(id)
