@@ -43,6 +43,26 @@ func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, app
 	return nil
 }
 
+func (r *AppointmentRepository) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	now := time.Now()
+	filter := bson.M{
+		"patient_id": userDNI,
+		"end_date": bson.M{
+			"$lt": now,
+		},
+	}
+	results, err := coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	appointments := make([]domain.Appointment, 0)
+	if err := results.All(ctx, &appointments); err != nil {
+		return nil, err
+	}
+	return appointments, nil
+}
+
 func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 

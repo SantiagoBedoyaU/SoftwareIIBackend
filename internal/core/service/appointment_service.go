@@ -30,6 +30,10 @@ func (s *AppointmentService) AddAppointmentProcedure(ctx context.Context, appoin
 	return s.appointmentRepository.AddAppointmentProcedure(ctx, appointmentID, procedure)
 }
 
+func (s *AppointmentService) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	return s.appointmentRepository.GetHistoryByUser(ctx, userDNI)
+}
+
 func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment *domain.Appointment) error {
 	// we get the user in order to send an email for the new appointment
 	user, err := s.UserService.GetUser(ctx, appointment.PatientID)
