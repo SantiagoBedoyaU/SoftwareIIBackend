@@ -2,10 +2,10 @@ package mongodb
 
 import (
 	"context"
+	"errors"
 	"softwareIIbackend/internal/core/domain"
 	"strings"
 	"time"
-	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,6 +19,26 @@ type AppointmentRepository struct {
 
 func NewAppointmentRepository(collname string, conn *MongoDBConnection) *AppointmentRepository {
 	return &AppointmentRepository{CollName: collname, conn: conn}
+}
+
+func (r *AppointmentRepository) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	now := time.Now()
+	filter := bson.M{
+		"patient_id": userDNI,
+		"end_date": bson.M{
+			"$lt": now,
+		},
+	}
+	results, err := coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	appointments := make([]domain.Appointment, 0)
+	if err := results.All(ctx, &appointments); err != nil {
+		return nil, err
+	}
+	return appointments, nil
 }
 
 func (r *AppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
@@ -81,7 +101,7 @@ func (r *AppointmentRepository) CancelAppointment(ctx context.Context, id string
 	if err != nil {
 		return domain.ErrInvalidIDFormat
 	}
-	
+
 	filter := bson.D{{Key: "_id", Value: objID}}
 	update := bson.M{
 		"$set": bson.M{

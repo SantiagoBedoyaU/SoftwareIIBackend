@@ -26,6 +26,10 @@ func (s *AppointmentService) GetByDateRange(ctx context.Context, startDate, endD
 	return s.appointmentRepository.GetByDateRange(ctx, startDate, endDate, doctorID, patientID)
 }
 
+func (s *AppointmentService) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {
+	return s.appointmentRepository.GetHistoryByUser(ctx, userDNI)
+}
+
 func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment *domain.Appointment) error {
 	// we get the user in order to send an email for the new appointment
 	user, err := s.UserService.GetUser(ctx, appointment.PatientID)
