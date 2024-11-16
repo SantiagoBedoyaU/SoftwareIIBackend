@@ -123,6 +123,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/appointments/my-history": {
+            "get": {
+                "description": "Get appointments user history",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointment"
+                ],
+                "summary": "Get appointments user history",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Appointment"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/appointments/{id}": {
             "patch": {
                 "description": "Cancel an appointment by an id",
@@ -143,6 +182,49 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Token",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/appointments/{id}/add-procedure": {
+            "patch": {
+                "description": "Add appointment procedure",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Appointment"
+                ],
+                "summary": "Add appointment procedure",
+                "parameters": [
+                    {
+                        "description": "Procedure Information",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Procedure"
+                        }
                     },
                     {
                         "type": "string",
@@ -632,6 +714,12 @@ const docTemplate = `{
                 "patient_id": {
                     "type": "string"
                 },
+                "procedures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Procedure"
+                    }
+                },
                 "start_date": {
                     "type": "string"
                 },
@@ -660,6 +748,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Procedure": {
+            "type": "object",
+            "properties": {
+                "description": {
                     "type": "string"
                 }
             }

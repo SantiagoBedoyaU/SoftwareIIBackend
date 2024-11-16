@@ -9,6 +9,10 @@ definitions:
         type: string
       patient_id:
         type: string
+      procedures:
+        items:
+          $ref: '#/definitions/domain.Procedure'
+        type: array
       start_date:
         type: string
       status:
@@ -29,6 +33,11 @@ definitions:
       dni:
         type: string
       password:
+        type: string
+    type: object
+  domain.Procedure:
+    properties:
+      description:
         type: string
     type: object
   domain.RecoverPassword:
@@ -224,6 +233,61 @@ paths:
           description: Not Found
           schema: {}
       summary: Cancel an appointment by an id
+      tags:
+      - Appointment
+  /appointments/{id}/add-procedure:
+    patch:
+      consumes:
+      - application/json
+      description: Add appointment procedure
+      parameters:
+      - description: Procedure Information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Procedure'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Add appointment procedure
+      tags:
+      - Appointment
+  /appointments/my-history:
+    get:
+      consumes:
+      - application/json
+      description: Get appointments user history
+      parameters:
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Appointment'
+            type: array
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Get appointments user history
       tags:
       - Appointment
   /recover-password:
