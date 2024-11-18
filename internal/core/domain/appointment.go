@@ -17,5 +17,5 @@ type Appointment struct {
 	DoctorID   string            `json:"doctor_id" bson:"doctor_id"`
 	PatientID  string            `json:"patient_id" bson:"patient_id"`
 	Status     AppointmentStatus `json:"status" bson:"status"`
-	Procedures []Procedure       `json:"procedures" bson:"procedures"`
+	Procedures []Procedure       `json:"procedures" bson:"procedures,omitempty"`
 }
