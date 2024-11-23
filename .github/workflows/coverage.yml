@@ -1,0 +1,46 @@
+name: Go Coverage Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests and Check Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22.5'
+        check-latest: true
+        cache: true
+        
+    - name: Verify Go version
+      run: go version
+        
+    - name: Install dependencies
+      run: |
+        go mod tidy
+        go mod download
+        
+    - name: Run tests with coverage
+      run: |
+        go test ./... -coverprofile=coverage.out -covermode=atomic -v
+        
+    - name: Check coverage percentage
+      run: |
+        coverage_percentage=$(go tool cover -func=coverage.out | grep total | grep -Eo '[0-9]+\.[0-9]+')
+        echo "Code coverage: $coverage_percentage%"
+        echo "COVERAGE=$coverage_percentage" >> $GITHUB_ENV
+        if (( $(echo "$coverage_percentage < 80" | bc -l) )); then
+          echo "❌ Code coverage is below 80%"
+          exit 1
+        else
+          echo "✅ Code coverage is above 80%"
+        fi

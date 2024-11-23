@@ -8,6 +8,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetAppointmentsHistoryHandler
+// @Router			/appointments/my-history [get]
+// @Summary			Get appointments user history
+// @Description		Get appointments user history
+// @Tags Appointment
+// @Param			authorization header string true	"Authorization Token"
+// @Accept			json
+// @Produce			json
+// @Success			200	{object}	[]domain.Appointment
+// @Failure			404	{object}	interface{}
+func (app *application) GetAppointmentsHistoryHandler(ctx *gin.Context) {
+	userDNI := ctx.Value("userDNI").(string)
+	appointments, err := app.services.appointmentService.GetHistoryByUser(ctx, userDNI)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, appointments)
+}
+
 // GetAppointmentsHandler
 // @Router			/appointments [get]
 // @Summary			Get appointments by date range
