@@ -45,7 +45,7 @@ func (s *AuthService) RecoverPassword(ctx context.Context, fullname, email strin
 	return s.emailService.SendRecoverPasswordEmail(ctx, fullname, email, token)
 }
 
-func (s *AuthService) VerifyAccessToken(ctx context.Context, accessToken string, claims *jwt.MapClaims) error {
+func (s *AuthService) VerifyAccessToken(_ context.Context, accessToken string, claims *jwt.MapClaims) error {
 	_, err := jwt.ParseWithClaims(accessToken, claims, func(t *jwt.Token) (interface{}, error) {
 		return []byte(s.cfg.JwtSecret), nil
 	})
