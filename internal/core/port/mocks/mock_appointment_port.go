@@ -372,6 +372,84 @@ func (c *MockAppointmentRepositoryCreateAppointmentCall) DoAndReturn(f func(cont
 	return c
 }
 
+// GenerateAttendanceReport mocks base method.
+func (m *MockAppointmentRepository) GenerateAttendanceReport(ctx context.Context, startDate, endDate time.Time) (*domain.AttendanceReport, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateAttendanceReport", ctx, startDate, endDate)
+	ret0, _ := ret[0].(*domain.AttendanceReport)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GenerateAttendanceReport indicates an expected call of GenerateAttendanceReport.
+func (mr *MockAppointmentRepositoryMockRecorder) GenerateAttendanceReport(ctx, startDate, endDate any) *MockAppointmentRepositoryGenerateAttendanceReportCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateAttendanceReport", reflect.TypeOf((*MockAppointmentRepository)(nil).GenerateAttendanceReport), ctx, startDate, endDate)
+	return &MockAppointmentRepositoryGenerateAttendanceReportCall{Call: call}
+}
+
+// MockAppointmentRepositoryGenerateAttendanceReportCall wrap *gomock.Call
+type MockAppointmentRepositoryGenerateAttendanceReportCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppointmentRepositoryGenerateAttendanceReportCall) Return(arg0 *domain.AttendanceReport, arg1 error) *MockAppointmentRepositoryGenerateAttendanceReportCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppointmentRepositoryGenerateAttendanceReportCall) Do(f func(context.Context, time.Time, time.Time) (*domain.AttendanceReport, error)) *MockAppointmentRepositoryGenerateAttendanceReportCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppointmentRepositoryGenerateAttendanceReportCall) DoAndReturn(f func(context.Context, time.Time, time.Time) (*domain.AttendanceReport, error)) *MockAppointmentRepositoryGenerateAttendanceReportCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
+// GenerateWaitingTimeReport mocks base method.
+func (m *MockAppointmentRepository) GenerateWaitingTimeReport(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateWaitingTimeReport", ctx, startDate, endDate)
+	ret0, _ := ret[0].([]domain.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GenerateWaitingTimeReport indicates an expected call of GenerateWaitingTimeReport.
+func (mr *MockAppointmentRepositoryMockRecorder) GenerateWaitingTimeReport(ctx, startDate, endDate any) *MockAppointmentRepositoryGenerateWaitingTimeReportCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateWaitingTimeReport", reflect.TypeOf((*MockAppointmentRepository)(nil).GenerateWaitingTimeReport), ctx, startDate, endDate)
+	return &MockAppointmentRepositoryGenerateWaitingTimeReportCall{Call: call}
+}
+
+// MockAppointmentRepositoryGenerateWaitingTimeReportCall wrap *gomock.Call
+type MockAppointmentRepositoryGenerateWaitingTimeReportCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppointmentRepositoryGenerateWaitingTimeReportCall) Return(arg0 []domain.Appointment, arg1 error) *MockAppointmentRepositoryGenerateWaitingTimeReportCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppointmentRepositoryGenerateWaitingTimeReportCall) Do(f func(context.Context, time.Time, time.Time) ([]domain.Appointment, error)) *MockAppointmentRepositoryGenerateWaitingTimeReportCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppointmentRepositoryGenerateWaitingTimeReportCall) DoAndReturn(f func(context.Context, time.Time, time.Time) ([]domain.Appointment, error)) *MockAppointmentRepositoryGenerateWaitingTimeReportCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
 // GetByDateRange mocks base method.
 func (m *MockAppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
 	m.ctrl.T.Helper()

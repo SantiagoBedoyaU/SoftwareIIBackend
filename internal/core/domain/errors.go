@@ -13,4 +13,5 @@ var (
 	ErrNotValidDates            = errors.New("end date must be greater than start date")
 	ErrAppointmentNotFound   	= errors.New("appointment not found")
 	ErrInvalidIDFormat       	= errors.New("id is invalid")
+	ErrNotValidEndDate			= errors.New("end date must be before the actual date")
 )

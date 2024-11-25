@@ -15,6 +15,7 @@ type services struct {
 	userService        port.UserService
 	authService        port.AuthService
 	appointmentService port.AppoitmentService
+	reportService	   port.ReportService
 }
 
 type application struct {
@@ -34,6 +35,8 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 	// appointment
 	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
 	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
+	// report
+	reportService := service.NewReportService(appointmentRepo)
 
 	// scheduler
 	scheduler, err := gocron.NewScheduler()
@@ -48,6 +51,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 			userService:        userService,
 			authService:        authService,
 			appointmentService: appointmentService,
+			reportService: 		reportService,
 		},
 		scheduler: scheduler,
 	}
