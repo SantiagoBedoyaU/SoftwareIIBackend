@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"errors"
-	"time"
+	"net/http"
 	"softwareIIbackend/internal/core/domain"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +21,7 @@ import (
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) GenerateAttendanceReportHandler(ctx *gin.Context) {
+func (app *Application) GenerateAttendanceReportHandler(ctx *gin.Context) {
 	startDate := ctx.Query("start_date")
 	endDate := ctx.Query("end_date")
 	startTime, err := time.Parse("2006-01-02", startDate)
@@ -78,7 +78,7 @@ func (app *application) GenerateAttendanceReportHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) GenerateWaitingTimeReportHandler(ctx *gin.Context) {
+func (app *Application) GenerateWaitingTimeReportHandler(ctx *gin.Context) {
 	startDate := ctx.Query("start_date")
 	endDate := ctx.Query("end_date")
 	startTime, err := time.Parse("2006-01-02", startDate)
