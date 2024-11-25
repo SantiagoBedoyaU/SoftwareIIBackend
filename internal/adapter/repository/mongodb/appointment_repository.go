@@ -30,6 +30,7 @@ func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, app
 	filter := bson.M{"_id": objID}
 	update := bson.M{
 		"$set": bson.M{
+			"real_start_date": procedure.RealStartDate,
 			"status": domain.AppointmentStatusDone,
 		},
 		"$push": bson.M{
@@ -142,4 +143,85 @@ func (r *AppointmentRepository) CancelAppointment(ctx context.Context, id string
 		return err
 	}
 	return nil
+}
+
+func (r *AppointmentRepository) GenerateAttendanceReport(ctx context.Context, startDate, endDate time.Time) (*domain.AttendanceReport, error){
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+
+	var report domain.AttendanceReport
+	now := time.Now()
+	truncated_now := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+
+	if truncated_now.Equal(endDate) || truncated_now.Before(endDate) {
+		return nil, domain.ErrNotValidEndDate
+	}
+	truncated_end_date := time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 23, 59, 59, 0, time.UTC)
+	filter := bson.M{
+		"$or": []bson.M{
+			{
+				"start_date": bson.M{"$gte": startDate},
+				"end_date":   bson.M{"$lte": truncated_end_date},
+			},
+		},
+			
+	}
+	total_patients, err := coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	filter["status"] = domain.AppointmentStatusPending
+
+	non_attending_patients, err := coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	attending_patients := total_patients - non_attending_patients
+
+	report.TotalPatients = total_patients
+	report.AttendingPatients = attending_patients
+	report.NonAttendingPatients = non_attending_patients
+	if total_patients > 0 {
+		report.AttendancePercentage = int64((attending_patients * 100) / total_patients)
+		report.NonAttendancePercentage = int64((non_attending_patients * 100) / total_patients)
+	} else {
+		report.AttendancePercentage = 0
+		report.NonAttendancePercentage = 0
+	}
+	return &report, nil
+}
+
+func (r *AppointmentRepository) GenerateWaitingTimeReport(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+
+	now := time.Now()
+	truncated_now := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+	if truncated_now.Equal(endDate) || truncated_now.Before(endDate) {
+		return nil, domain.ErrNotValidEndDate
+	}
+	truncated_end_date := time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 23, 59, 59, 0, time.UTC)
+	filter := bson.M{
+		"$and": []bson.M{
+			{
+				"$or": []bson.M{
+					{
+						"start_date": bson.M{"$gte": startDate},
+						"end_date":   bson.M{"$lte": truncated_end_date},
+					},
+				},
+			},
+			{
+				"status": bson.M{"$eq": domain.AppointmentStatusDone},
+			},
+		},
+	}
+	results, err := coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	appointments := make([]domain.Appointment, 0)
+
+	if err := results.All(ctx, &appointments); err != nil {
+		return nil, err
+	}
+	return appointments, nil
 }

@@ -63,6 +63,11 @@ func (app *Application) setupRoutes() *gin.Engine {
 				appointment.PATCH("/:id", app.CancelAppointmentHandler)
 				appointment.PATCH("/:id/add-procedure", app.AddAppointmentProcedureHandler)
 			}
+			reports := protected.Group("/reports")
+			{
+				reports.GET("/attendance-report", app.GenerateAttendanceReportHandler)
+				reports.GET("/waiting-time-report", app.GenerateWaitingTimeReportHandler)
+      }
 			at := protected.Group("/unavailable-times")
 			{
 				at.GET("", app.GetUnavailableTimeHandler)

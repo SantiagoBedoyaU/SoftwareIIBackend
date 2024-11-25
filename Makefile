@@ -27,6 +27,7 @@ audit:
 	go test -race -vet=off ./...
 
 generate:
+	go install go.uber.org/mock/mockgen@latest
 	go generate ./...
 
 .PHONY: run seed build swag test audit generate

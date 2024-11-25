@@ -15,6 +15,7 @@ type services struct {
 	userService            port.UserService
 	authService            port.AuthService
 	appointmentService     port.AppoitmentService
+	reportService	         port.ReportService
 	unavailableTimeService port.UnavailableTimeService
 }
 
@@ -35,6 +36,8 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *A
 	// appointment
 	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
 	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
+	// report
+	reportService := service.NewReportService(appointmentRepo)
 	// unavailable time
 	unavailableTimeRepo := mongodb.NewUnavailableTimeRepository("unavailable_time", dbconn)
 	unavailableTimeService := service.NewUnavailableTimeService(unavailableTimeRepo, userService)
@@ -53,6 +56,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *A
 			authService:            authService,
 			appointmentService:     appointmentService,
 			unavailableTimeService: unavailableTimeService,
+      reportService: 		      reportService,
 		},
 		scheduler: scheduler,
 	}
