@@ -12,7 +12,7 @@ type AttendanceReport struct {
 
 type WaitingTimeReport struct {
 	AverageWaitingTime    float64            	`json:"average_waiting_time" bson:"average_waiting_time"`
-	DaysPerAverage        map[time.Time]float64 `json:"days_per_average" bson:"days_per_average"`
+	AveragePerDay         map[time.Time]float64 `json:"average_per_day" bson:"average_per_day"`
 	DayWithMaxWaitingTime time.Time          	`json:"days_with_max_waiting_time" bson:"days_with_max_waiting_time"`
 	DayWithMinWaitingTime time.Time          	`json:"days_with_min_waiting_time" bson:"days_with_min_waiting_time"`
 }

@@ -89,7 +89,7 @@ func (s *ReportService) GenerateWaitingTimeReport(ctx context.Context, startDate
 	} else {
 		report.AverageWaitingTime = 0
 	}
-	report.DaysPerAverage = days
+	report.AveragePerDay = days
 	report.DayWithMaxWaitingTime = max_day
 	report.DayWithMinWaitingTime = min_day
 

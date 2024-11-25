@@ -30,6 +30,7 @@ func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, app
 	filter := bson.M{"_id": objID}
 	update := bson.M{
 		"$set": bson.M{
+			"real_start_date": procedure.RealStartDate,
 			"status": domain.AppointmentStatusDone,
 		},
 		"$push": bson.M{
