@@ -21,7 +21,7 @@ import (
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			401	{object}	interface{}
-func (app *application) SignInHandler(ctx *gin.Context) {
+func (app *Application) SignInHandler(ctx *gin.Context) {
 	var req domain.Auth
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -72,7 +72,7 @@ func (app *application) SignInHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) RecoverPasswordHandler(ctx *gin.Context) {
+func (app *Application) RecoverPasswordHandler(ctx *gin.Context) {
 	var req domain.RecoverPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -118,7 +118,7 @@ func (app *application) RecoverPasswordHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) ResetPasswordHandler(ctx *gin.Context) {
+func (app *Application) ResetPasswordHandler(ctx *gin.Context) {
 	var req domain.ResetPassword
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

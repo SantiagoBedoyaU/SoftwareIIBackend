@@ -19,11 +19,11 @@ func NewUserRepository(collname string, conn *MongoDBConnection) *UserRepository
 	return &UserRepository{conn: conn, CollName: collname}
 }
 
-func (r *UserRepository) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
+func (r *UserRepository) GetUser(ctx context.Context, dni string) (*domain.User, error) {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	var user domain.User
-	filter := bson.D{{Key: "dni", Value: DNI}}
+	filter := bson.D{{Key: "dni", Value: dni}}
 	err := coll.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {

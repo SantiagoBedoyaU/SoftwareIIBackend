@@ -18,7 +18,7 @@ import (
 // @Produce			json
 // @Success			200	{object}	[]domain.Appointment
 // @Failure			404	{object}	interface{}
-func (app *application) GetAppointmentsHistoryHandler(ctx *gin.Context) {
+func (app *Application) GetAppointmentsHistoryHandler(ctx *gin.Context) {
 	userDNI := ctx.Value("userDNI").(string)
 	appointments, err := app.services.appointmentService.GetHistoryByUser(ctx, userDNI)
 	if err != nil {
@@ -44,7 +44,7 @@ func (app *application) GetAppointmentsHistoryHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	[]domain.Appointment
 // @Failure			404	{object}	interface{}
-func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
+func (app *Application) GetAppointmentsHandler(ctx *gin.Context) {
 	startDate := ctx.Query("start_date")
 	endDate := ctx.Query("end_date")
 	doctorID := ctx.Query("doctor_id")
@@ -93,7 +93,7 @@ func (app *application) GetAppointmentsHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	domain.Appointment
 // @Failure			404	{object}	interface{}
-func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
+func (app *Application) CreateAppointmentHandler(ctx *gin.Context) {
 	var appointment domain.Appointment
 	if err := ctx.ShouldBindJSON(&appointment); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -129,7 +129,7 @@ func (app *application) CreateAppointmentHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}  	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) CancelAppointmentHandler(ctx *gin.Context) {
+func (app *Application) CancelAppointmentHandler(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if err := app.services.appointmentService.CancelAppointment(ctx, id); err != nil {
 		if err == domain.ErrAppointmentNotFound {
