@@ -21,8 +21,8 @@ func NewUserService(repo port.UserRepository, emailService port.EmailService) *U
 	return &UserService{repo: repo, emailService: emailService}
 }
 
-func (s *UserService) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
-	return s.repo.GetUser(ctx, DNI)
+func (s *UserService) GetUser(ctx context.Context, dni string) (*domain.User, error) {
+	return s.repo.GetUser(ctx, dni)
 }
 
 func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
@@ -40,7 +40,7 @@ func (s *UserService) GetUserInformation(ctx context.Context) (*domain.User, err
 }
 
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
-	var Authorized float64 = ctx.Value("userRole").(float64)
+	authorized := ctx.Value("userRole").(float64)
 	// we can't have another user with the same DNI
 	if _, err := s.repo.GetUser(ctx, user.DNI); err == nil {
 		return domain.ErrUserAlreadyExist
@@ -52,7 +52,7 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	}
 
 	// we can't allow create user with role admin, unless the creator is an admin
-	if user.Role == domain.AdminRole && Authorized != float64(domain.AdminRole) {
+	if user.Role == domain.AdminRole && authorized != float64(domain.AdminRole) {
 		return domain.ErrAdminRoleNotAllowed
 	}
 

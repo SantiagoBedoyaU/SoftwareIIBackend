@@ -55,6 +55,17 @@ definitions:
       password:
         type: string
     type: object
+  domain.UnavailableTime:
+    properties:
+      doctor_id:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      start_date:
+        type: string
+    type: object
   domain.UpdatePassword:
     properties:
       new_password:
@@ -452,6 +463,135 @@ paths:
       summary: Authenticate user by DNI and Password
       tags:
       - Auth
+  /unavailable-times:
+    get:
+      consumes:
+      - application/json
+      description: Get unavailable-times by date range
+      parameters:
+      - description: Start Date with format YYYY-MM-DD
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date with format YYYY-MM-DD
+        in: query
+        name: end_date
+        required: true
+        type: string
+      - description: Doctor ID
+        in: query
+        name: doctor_id
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.UnavailableTime'
+            type: array
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Get unavailable-times by date range
+      tags:
+      - UnavailableTimes
+    post:
+      consumes:
+      - application/json
+      description: Create unavailable-time
+      parameters:
+      - description: Unavailable Time Information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UnavailableTime'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Create unavailable-time
+      tags:
+      - UnavailableTimes
+  /unavailable-times/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete unavailable-time
+      parameters:
+      - description: Unavailable time ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Delete unavailable-time
+      tags:
+      - UnavailableTimes
+    patch:
+      consumes:
+      - application/json
+      description: Update unavailable-time
+      parameters:
+      - description: Unavailable time ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Unavailable Time Information
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UnavailableTime'
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Update unavailable-time
+      tags:
+      - UnavailableTimes
   /users:
     post:
       consumes:

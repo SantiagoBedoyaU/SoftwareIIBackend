@@ -11,20 +11,21 @@ import (
 )
 
 type services struct {
-	emailService       port.EmailService
-	userService        port.UserService
-	authService        port.AuthService
-	appointmentService port.AppoitmentService
-	reportService	   port.ReportService
+	emailService           port.EmailService
+	userService            port.UserService
+	authService            port.AuthService
+	appointmentService     port.AppoitmentService
+	reportService	         port.ReportService
+	unavailableTimeService port.UnavailableTimeService
 }
 
-type application struct {
+type Application struct {
 	config    *config.Config
 	services  services
 	scheduler gocron.Scheduler
 }
 
-func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *application {
+func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *Application {
 	// email service with mailgun
 	emailService := mailgun.NewEmailService(&config.Notification)
 	// user
@@ -37,6 +38,9 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
 	// report
 	reportService := service.NewReportService(appointmentRepo)
+	// unavailable time
+	unavailableTimeRepo := mongodb.NewUnavailableTimeRepository("unavailable_time", dbconn)
+	unavailableTimeService := service.NewUnavailableTimeService(unavailableTimeRepo, userService)
 
 	// scheduler
 	scheduler, err := gocron.NewScheduler()
@@ -44,14 +48,15 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *a
 		panic(err)
 	}
 
-	app := &application{
+	app := &Application{
 		config: config,
 		services: services{
-			emailService:       emailService,
-			userService:        userService,
-			authService:        authService,
-			appointmentService: appointmentService,
-			reportService: 		reportService,
+			emailService:           emailService,
+			userService:            userService,
+			authService:            authService,
+			appointmentService:     appointmentService,
+			unavailableTimeService: unavailableTimeService,
+      reportService: 		      reportService,
 		},
 		scheduler: scheduler,
 	}
