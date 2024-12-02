@@ -12,7 +12,7 @@ import (
 // @Summary			Add appointment procedure
 // @Description		Add appointment procedure
 // @Tags Appointment
-// @Param			body body domain.Procedure true		"Procedure Information"
+// @Param			body body domain.AppointmentPatch true		"Procedure Information"
 // @Param			authorization header string true	"Authorization Token"
 // @Accept			json
 // @Produce			json
@@ -20,7 +20,7 @@ import (
 // @Failure			404	{object}	interface{}
 func (app *Application) AddAppointmentProcedureHandler(ctx *gin.Context) {
 	appointmentID := ctx.Param("id")
-	var req domain.Procedure
+	var req domain.AppointmentPatch
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),

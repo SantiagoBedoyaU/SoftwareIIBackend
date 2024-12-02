@@ -43,17 +43,17 @@ func (m *MockAppoitmentService) EXPECT() *MockAppoitmentServiceMockRecorder {
 }
 
 // AddAppointmentProcedure mocks base method.
-func (m *MockAppoitmentService) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+func (m *MockAppoitmentService) AddAppointmentProcedure(ctx context.Context, appointmentID string, appointmentPatch domain.AppointmentPatch) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, procedure)
+	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, appointmentPatch)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // AddAppointmentProcedure indicates an expected call of AddAppointmentProcedure.
-func (mr *MockAppoitmentServiceMockRecorder) AddAppointmentProcedure(ctx, appointmentID, procedure any) *MockAppoitmentServiceAddAppointmentProcedureCall {
+func (mr *MockAppoitmentServiceMockRecorder) AddAppointmentProcedure(ctx, appointmentID, appointmentPatch any) *MockAppoitmentServiceAddAppointmentProcedureCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppoitmentService)(nil).AddAppointmentProcedure), ctx, appointmentID, procedure)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppoitmentService)(nil).AddAppointmentProcedure), ctx, appointmentID, appointmentPatch)
 	return &MockAppoitmentServiceAddAppointmentProcedureCall{Call: call}
 }
 
@@ -69,13 +69,13 @@ func (c *MockAppoitmentServiceAddAppointmentProcedureCall) Return(arg0 error) *M
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockAppoitmentServiceAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.Procedure) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
+func (c *MockAppoitmentServiceAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.AppointmentPatch) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockAppoitmentServiceAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.Procedure) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
+func (c *MockAppoitmentServiceAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.AppointmentPatch) error) *MockAppoitmentServiceAddAppointmentProcedureCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
@@ -259,17 +259,17 @@ func (m *MockAppointmentRepository) EXPECT() *MockAppointmentRepositoryMockRecor
 }
 
 // AddAppointmentProcedure mocks base method.
-func (m *MockAppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+func (m *MockAppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, appointmentPatch domain.AppointmentPatch) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, procedure)
+	ret := m.ctrl.Call(m, "AddAppointmentProcedure", ctx, appointmentID, appointmentPatch)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // AddAppointmentProcedure indicates an expected call of AddAppointmentProcedure.
-func (mr *MockAppointmentRepositoryMockRecorder) AddAppointmentProcedure(ctx, appointmentID, procedure any) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+func (mr *MockAppointmentRepositoryMockRecorder) AddAppointmentProcedure(ctx, appointmentID, appointmentPatch any) *MockAppointmentRepositoryAddAppointmentProcedureCall {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppointmentRepository)(nil).AddAppointmentProcedure), ctx, appointmentID, procedure)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAppointmentProcedure", reflect.TypeOf((*MockAppointmentRepository)(nil).AddAppointmentProcedure), ctx, appointmentID, appointmentPatch)
 	return &MockAppointmentRepositoryAddAppointmentProcedureCall{Call: call}
 }
 
@@ -285,13 +285,13 @@ func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) Return(arg0 error
 }
 
 // Do rewrite *gomock.Call.Do
-func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.Procedure) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) Do(f func(context.Context, string, domain.AppointmentPatch) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
 	c.Call = c.Call.Do(f)
 	return c
 }
 
 // DoAndReturn rewrite *gomock.Call.DoAndReturn
-func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.Procedure) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
+func (c *MockAppointmentRepositoryAddAppointmentProcedureCall) DoAndReturn(f func(context.Context, string, domain.AppointmentPatch) error) *MockAppointmentRepositoryAddAppointmentProcedureCall {
 	c.Call = c.Call.DoAndReturn(f)
 	return c
 }
