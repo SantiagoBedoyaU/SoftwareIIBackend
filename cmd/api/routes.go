@@ -25,7 +25,7 @@ func corsConfig() cors.Config {
 	return config
 }
 
-func (app *application) setupRoutes() *gin.Engine {
+func (app *Application) setupRoutes() *gin.Engine {
 	router := gin.Default()
 	router.Use(helmet.Default())
 	if err := router.SetTrustedProxies(nil); err != nil {
@@ -62,6 +62,18 @@ func (app *application) setupRoutes() *gin.Engine {
 				appointment.GET("/my-history", app.GetAppointmentsHistoryHandler)
 				appointment.PATCH("/:id", app.CancelAppointmentHandler)
 				appointment.PATCH("/:id/add-procedure", app.AddAppointmentProcedureHandler)
+			}
+			reports := protected.Group("/reports")
+			{
+				reports.GET("/attendance-report", app.GenerateAttendanceReportHandler)
+				reports.GET("/waiting-time-report", app.GenerateWaitingTimeReportHandler)
+      }
+			at := protected.Group("/unavailable-times")
+			{
+				at.GET("", app.GetUnavailableTimeHandler)
+				at.POST("", app.CreateUnavailableTimeHandler)
+				at.PATCH("/:id", app.UpdateUnavailableTimeHandler)
+				at.DELETE("/:id", app.DeleteUnavailableTimeHandler)
 			}
 		}
 

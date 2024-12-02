@@ -18,7 +18,7 @@ import (
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) AddAppointmentProcedureHandler(ctx *gin.Context) {
+func (app *Application) AddAppointmentProcedureHandler(ctx *gin.Context) {
 	appointmentID := ctx.Param("id")
 	var req domain.Procedure
 	if err := ctx.ShouldBindJSON(&req); err != nil {

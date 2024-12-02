@@ -28,12 +28,12 @@ func main() {
 	if err := client.Ping(ctx, nil); err != nil {
 		panic(err)
 	}
-	log.Println("Successfull connection with MongoDB")
+	log.Println("Successful connection with MongoDB")
 
 	err = SeedUsers(ctx, client.Database(cfg.DBName).Collection("users"))
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println("Successfull db migration")
+	log.Println("Successful db migration")
 }

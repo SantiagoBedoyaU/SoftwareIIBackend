@@ -51,6 +51,7 @@ func (s *AppointmentService) CreateAppointment(ctx context.Context, appointment 
 	}
 	endDate := appointment.StartDate.Add(15 * time.Minute)
 	appointment.EndDate = endDate
+	appointment.RealStartDate = appointment.StartDate
 	// we can't create two appointments with the same date
 	if appointments, _ := s.appointmentRepository.GetByDateRange(ctx, appointment.StartDate, appointment.EndDate, "", appointment.PatientID); len(appointments) > 0 {
 		return domain.ErrAlreadyHaveAnAppointment

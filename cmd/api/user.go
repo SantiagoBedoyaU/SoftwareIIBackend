@@ -22,7 +22,7 @@ import (
 // @Produce			json
 // @Success			200	{object}  	domain.User
 // @Failure			404	{object}	interface{}
-func (app *application) GetUserByDNIHandler(ctx *gin.Context) {
+func (app *Application) GetUserByDNIHandler(ctx *gin.Context) {
 	dni := ctx.Param("dni")
 	user, err := app.services.userService.GetUser(ctx, dni)
 	if err != nil {
@@ -48,7 +48,7 @@ func (app *application) GetUserByDNIHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	domain.User
 // @Failure			404	{object}	interface{}
-func (app *application) CreateUserHandler(ctx *gin.Context) {
+func (app *Application) CreateUserHandler(ctx *gin.Context) {
 	var user domain.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -77,7 +77,7 @@ func (app *application) CreateUserHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) LoadUserByCSVHandler(ctx *gin.Context) {
+func (app *Application) LoadUserByCSVHandler(ctx *gin.Context) {
 	multipartFile, err := ctx.FormFile("file")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -137,7 +137,7 @@ func (app *application) LoadUserByCSVHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			401	{object}	interface{}
-func (app *application) UpdateUserPasswordHandler(ctx *gin.Context) {
+func (app *Application) UpdateUserPasswordHandler(ctx *gin.Context) {
 	var req domain.UpdatePassword
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
@@ -166,7 +166,7 @@ func (app *application) UpdateUserPasswordHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	domain.User
 // @Failure			404	{object}	interface{}
-func (app *application) GetMyInformationHandler(ctx *gin.Context) {
+func (app *Application) GetMyInformationHandler(ctx *gin.Context) {
 	user, err := app.services.userService.GetUserInformation(ctx)
 	if err != nil {
 		if errors.Is(err, domain.ErrUserNotFound) {
@@ -192,7 +192,7 @@ func (app *application) GetMyInformationHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) UpdateMyInformationHandler(ctx *gin.Context) {
+func (app *Application) UpdateMyInformationHandler(ctx *gin.Context) {
 	var req domain.UpdateUser
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
@@ -218,7 +218,7 @@ func (app *application) UpdateMyInformationHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	interface{}
 // @Failure			404	{object}	interface{}
-func (app *application) UpdateUserRoleHandler(ctx *gin.Context) {
+func (app *Application) UpdateUserRoleHandler(ctx *gin.Context) {
 	var req domain.UpdateRole
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
@@ -256,7 +256,7 @@ func (app *application) UpdateUserRoleHandler(ctx *gin.Context) {
 // @Produce			json
 // @Success			200	{object}	[]domain.User
 // @Failure			404	{object}	interface{}
-func (app *application) GetUsersByRoleHandler(ctx *gin.Context) {
+func (app *Application) GetUsersByRoleHandler(ctx *gin.Context) {
 	role := ctx.Query("role")
 	if role == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "role query param must be provided"})
