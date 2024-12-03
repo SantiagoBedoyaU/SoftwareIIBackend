@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"softwareIIbackend/internal/core/domain"
 	"strings"
 	"time"
@@ -21,7 +22,7 @@ func NewAppointmentRepository(collname string, conn *MongoDBConnection) *Appoint
 	return &AppointmentRepository{CollName: collname, conn: conn}
 }
 
-func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
+func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, appointmentID string, appointmentPatch domain.AppointmentPatch) error {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 	objID, err := primitive.ObjectIDFromHex(appointmentID)
 	if err != nil {
@@ -30,11 +31,11 @@ func (r *AppointmentRepository) AddAppointmentProcedure(ctx context.Context, app
 	filter := bson.M{"_id": objID}
 	update := bson.M{
 		"$set": bson.M{
-			"real_start_date": procedure.RealStartDate,
+			"real_start_date": appointmentPatch.RealStartDate,
 			"status": domain.AppointmentStatusDone,
 		},
 		"$push": bson.M{
-			"procedures": procedure,
+			"procedures": appointmentPatch.Procedure,
 		},
 	}
 	_, err = coll.UpdateOne(ctx, filter, update)
@@ -181,8 +182,10 @@ func (r *AppointmentRepository) GenerateAttendanceReport(ctx context.Context, st
 	report.AttendingPatients = attending_patients
 	report.NonAttendingPatients = non_attending_patients
 	if total_patients > 0 {
-		report.AttendancePercentage = int64((attending_patients * 100) / total_patients)
-		report.NonAttendancePercentage = int64((non_attending_patients * 100) / total_patients)
+		report.AttendancePercentage = (float64(attending_patients) * 100) / float64(total_patients)
+		report.NonAttendancePercentage = (float64(non_attending_patients) * 100) / float64(total_patients)
+		fmt.Println((float64(attending_patients) * 100) / float64(total_patients))
+		fmt.Println((float64(non_attending_patients) * 100) / float64(total_patients))
 	} else {
 		report.AttendancePercentage = 0
 		report.NonAttendancePercentage = 0
