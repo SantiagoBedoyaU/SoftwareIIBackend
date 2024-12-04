@@ -450,6 +450,45 @@ func (c *MockAppointmentRepositoryGenerateWaitingTimeReportCall) DoAndReturn(f f
 	return c
 }
 
+// GetAppointmentsBetweenDates mocks base method.
+func (m *MockAppointmentRepository) GetAppointmentsBetweenDates(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAppointmentsBetweenDates", ctx, startDate, endDate)
+	ret0, _ := ret[0].([]domain.Appointment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAppointmentsBetweenDates indicates an expected call of GetAppointmentsBetweenDates.
+func (mr *MockAppointmentRepositoryMockRecorder) GetAppointmentsBetweenDates(ctx, startDate, endDate any) *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAppointmentsBetweenDates", reflect.TypeOf((*MockAppointmentRepository)(nil).GetAppointmentsBetweenDates), ctx, startDate, endDate)
+	return &MockAppointmentRepositoryGetAppointmentsBetweenDatesCall{Call: call}
+}
+
+// MockAppointmentRepositoryGetAppointmentsBetweenDatesCall wrap *gomock.Call
+type MockAppointmentRepositoryGetAppointmentsBetweenDatesCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall) Return(arg0 []domain.Appointment, arg1 error) *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall {
+	c.Call = c.Call.Return(arg0, arg1)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall) Do(f func(context.Context, time.Time, time.Time) ([]domain.Appointment, error)) *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall) DoAndReturn(f func(context.Context, time.Time, time.Time) ([]domain.Appointment, error)) *MockAppointmentRepositoryGetAppointmentsBetweenDatesCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
 // GetByDateRange mocks base method.
 func (m *MockAppointmentRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time, doctorID, patientID string) ([]domain.Appointment, error) {
 	m.ctrl.T.Helper()

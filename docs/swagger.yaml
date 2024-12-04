@@ -381,6 +381,68 @@ paths:
         appointments
       tags:
       - Report
+  /reports/most-consulted-doctors:
+    get:
+      consumes:
+      - application/json
+      description: Generate a report with the doctors that have more realized appointments.
+      parameters:
+      - description: Start Date with format YYYY-MM-DD
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date with format YYYY-MM-DD
+        in: query
+        name: end_date
+        required: true
+        type: string
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Generate a report with the doctors that have more realized appointments.
+      tags:
+      - Report
+  /reports/users-dni-report:
+    get:
+      consumes:
+      - application/json
+      description: Generate a report about the percentage of users with different
+        type of DNI
+      parameters:
+      - description: Authorization Token
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Generate a report about the percentage of users with different type
+        of DNI
+      tags:
+      - Report
   /reports/waiting-time-report:
     get:
       consumes:
@@ -506,7 +568,8 @@ paths:
             type: array
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Get unavailable-times by date range
       tags:
       - UnavailableTimes
@@ -531,10 +594,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Create unavailable-time
       tags:
       - UnavailableTimes
@@ -559,10 +624,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Delete unavailable-time
       tags:
       - UnavailableTimes
@@ -592,10 +659,12 @@ paths:
       responses:
         "200":
           description: OK
-          schema: {}
+          schema:
+            type: object
         "404":
           description: Not Found
-          schema: {}
+          schema:
+            type: object
       summary: Update unavailable-time
       tags:
       - UnavailableTimes

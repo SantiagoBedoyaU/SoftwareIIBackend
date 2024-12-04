@@ -138,3 +138,33 @@ func (r *UserRepository) GetUsersByRole(ctx context.Context, role domain.UserRol
 	}
 	return users, nil
 }
+
+func (r *UserRepository) GenerateUsersDNIReport(ctx context.Context) (int64, int64, int64, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	// Count the CC users
+	filter := bson.M{
+		"type_dni": domain.TypeDniCC,
+	}
+	total_CC_users, err := coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	// Count the TI users
+	filter = bson.M{
+		"type_dni": domain.TypeDniTI,
+	}
+	total_TI_users, err := coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	// Count the TP users
+	filter = bson.M{
+		"type_dni": domain.TypeDniTP,
+	}
+	total_TP_users, err := coll.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	return total_CC_users, total_TI_users, total_TP_users, nil
+
+}

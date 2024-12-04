@@ -67,6 +67,8 @@ func (app *Application) setupRoutes() *gin.Engine {
 			{
 				reports.GET("/attendance-report", app.GenerateAttendanceReportHandler)
 				reports.GET("/waiting-time-report", app.GenerateWaitingTimeReportHandler)
+				reports.GET("/users-dni-report", app.GenerateUsersDNIReportHandler)
+				reports.GET("/most-consulted-doctors", app.GenerateMostConsultedDoctorsReportHandler)
       }
 			at := protected.Group("/unavailable-times")
 			{
