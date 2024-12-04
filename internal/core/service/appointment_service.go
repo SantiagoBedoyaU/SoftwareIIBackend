@@ -26,8 +26,8 @@ func (s *AppointmentService) GetByDateRange(ctx context.Context, startDate, endD
 	return s.appointmentRepository.GetByDateRange(ctx, startDate, endDate, doctorID, patientID)
 }
 
-func (s *AppointmentService) AddAppointmentProcedure(ctx context.Context, appointmentID string, procedure domain.Procedure) error {
-	return s.appointmentRepository.AddAppointmentProcedure(ctx, appointmentID, procedure)
+func (s *AppointmentService) AddAppointmentProcedure(ctx context.Context, appointmentID string, appointmentPatch domain.AppointmentPatch) error {
+	return s.appointmentRepository.AddAppointmentProcedure(ctx, appointmentID, appointmentPatch)
 }
 
 func (s *AppointmentService) GetHistoryByUser(ctx context.Context, userDNI string) ([]domain.Appointment, error) {

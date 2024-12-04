@@ -21,6 +21,13 @@ definitions:
       status:
         $ref: '#/definitions/domain.AppointmentStatus'
     type: object
+  domain.AppointmentPatch:
+    properties:
+      procedure:
+        $ref: '#/definitions/domain.Procedure'
+      real_start_date:
+        type: string
+    type: object
   domain.AppointmentStatus:
     enum:
     - 0
@@ -264,7 +271,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/domain.Procedure'
+          $ref: '#/definitions/domain.AppointmentPatch'
       - description: Authorization Token
         in: header
         name: authorization

@@ -233,7 +233,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Procedure"
+                            "$ref": "#/definitions/domain.AppointmentPatch"
                         }
                     },
                     {
@@ -1072,6 +1072,17 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/domain.AppointmentStatus"
+                }
+            }
+        },
+        "domain.AppointmentPatch": {
+            "type": "object",
+            "properties": {
+                "procedure": {
+                    "$ref": "#/definitions/domain.Procedure"
+                },
+                "real_start_date": {
+                    "type": "string"
                 }
             }
         },

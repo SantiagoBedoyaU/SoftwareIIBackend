@@ -6,8 +6,8 @@ type AttendanceReport struct {
 	TotalPatients           int64 `json:"total_patients" bson:"total_patients"`
 	NonAttendingPatients    int64 `json:"non-attending_patients" bson:"non-attending_patients"`
 	AttendingPatients       int64 `json:"attending_patients" bson:"attending_patients"`
-	AttendancePercentage    int64 `json:"attendance_percentage" bson:"attendance_percentage"`
-	NonAttendancePercentage int64 `json:"non-attendance_percentage" bson:"non-attendance_percentage"`
+	AttendancePercentage    float64 `json:"attendance_percentage" bson:"attendance_percentage"`
+	NonAttendancePercentage float64 `json:"non-attendance_percentage" bson:"non-attendance_percentage"`
 }
 
 type WaitingTimeReport struct {
