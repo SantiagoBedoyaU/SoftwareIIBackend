@@ -27,4 +27,5 @@ type UserRepository interface {
 	UpdateUserPassword(ctx context.Context, user *domain.User) error
 	UpdateUserInformation(ctx context.Context, user *domain.User) error
 	UpdateUserRole(ctx context.Context, updateRole *domain.UpdateRole) error
+	GenerateUsersDNIReport(ctx context.Context) (int64, int64, int64, error) 
 }

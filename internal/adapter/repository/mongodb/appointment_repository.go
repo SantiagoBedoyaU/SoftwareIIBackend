@@ -3,7 +3,6 @@ package mongodb
 import (
 	"context"
 	"errors"
-	"fmt"
 	"softwareIIbackend/internal/core/domain"
 	"strings"
 	"time"
@@ -150,18 +149,11 @@ func (r *AppointmentRepository) GenerateAttendanceReport(ctx context.Context, st
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
 	var report domain.AttendanceReport
-	now := time.Now()
-	truncated_now := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
-
-	if truncated_now.Equal(endDate) || truncated_now.Before(endDate) {
-		return nil, domain.ErrNotValidEndDate
-	}
-	truncated_end_date := time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 23, 59, 59, 0, time.UTC)
 	filter := bson.M{
 		"$or": []bson.M{
 			{
 				"start_date": bson.M{"$gte": startDate},
-				"end_date":   bson.M{"$lte": truncated_end_date},
+				"end_date":   bson.M{"$lte": endDate},
 			},
 		},
 			
@@ -184,8 +176,6 @@ func (r *AppointmentRepository) GenerateAttendanceReport(ctx context.Context, st
 	if total_patients > 0 {
 		report.AttendancePercentage = (float64(attending_patients) * 100) / float64(total_patients)
 		report.NonAttendancePercentage = (float64(non_attending_patients) * 100) / float64(total_patients)
-		fmt.Println((float64(attending_patients) * 100) / float64(total_patients))
-		fmt.Println((float64(non_attending_patients) * 100) / float64(total_patients))
 	} else {
 		report.AttendancePercentage = 0
 		report.NonAttendancePercentage = 0
@@ -196,19 +186,13 @@ func (r *AppointmentRepository) GenerateAttendanceReport(ctx context.Context, st
 func (r *AppointmentRepository) GenerateWaitingTimeReport(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
 	coll := r.conn.GetDatabase().Collection(r.CollName)
 
-	now := time.Now()
-	truncated_now := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
-	if truncated_now.Equal(endDate) || truncated_now.Before(endDate) {
-		return nil, domain.ErrNotValidEndDate
-	}
-	truncated_end_date := time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 23, 59, 59, 0, time.UTC)
 	filter := bson.M{
 		"$and": []bson.M{
 			{
 				"$or": []bson.M{
 					{
 						"start_date": bson.M{"$gte": startDate},
-						"end_date":   bson.M{"$lte": truncated_end_date},
+						"end_date":   bson.M{"$lte": endDate},
 					},
 				},
 			},
@@ -223,6 +207,39 @@ func (r *AppointmentRepository) GenerateWaitingTimeReport(ctx context.Context, s
 	}
 	appointments := make([]domain.Appointment, 0)
 
+	if err := results.All(ctx, &appointments); err != nil {
+		return nil, err
+	}
+	return appointments, nil
+}
+
+func (r *AppointmentRepository) GetAppointmentsBetweenDates(ctx context.Context, startDate, endDate time.Time) ([]domain.Appointment, error) {
+	coll := r.conn.GetDatabase().Collection(r.CollName)
+	
+	filter := bson.M{
+		"$and": []bson.M{
+			{
+				"$or": []bson.M{
+					{
+						"start_date": bson.M{"$lt": endDate},
+						"end_date":   bson.M{"$gt": startDate},
+					},
+					{
+						"start_date": bson.M{"$gte": startDate},
+						"end_date":   bson.M{"$lte": endDate},
+					},
+				},
+			},
+			{
+				"status": bson.M{"$eq": domain.AppointmentStatusDone},
+			},
+		},
+	}
+	results, err := coll.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	appointments := make([]domain.Appointment, 0)
 	if err := results.All(ctx, &appointments); err != nil {
 		return nil, err
 	}

@@ -449,6 +449,47 @@ func (c *MockUserRepositoryCreateUserCall) DoAndReturn(f func(context.Context, *
 	return c
 }
 
+// GenerateUsersDNIReport mocks base method.
+func (m *MockUserRepository) GenerateUsersDNIReport(ctx context.Context) (int64, int64, int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateUsersDNIReport", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(int64)
+	ret3, _ := ret[3].(error)
+	return ret0, ret1, ret2, ret3
+}
+
+// GenerateUsersDNIReport indicates an expected call of GenerateUsersDNIReport.
+func (mr *MockUserRepositoryMockRecorder) GenerateUsersDNIReport(ctx any) *MockUserRepositoryGenerateUsersDNIReportCall {
+	mr.mock.ctrl.T.Helper()
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateUsersDNIReport", reflect.TypeOf((*MockUserRepository)(nil).GenerateUsersDNIReport), ctx)
+	return &MockUserRepositoryGenerateUsersDNIReportCall{Call: call}
+}
+
+// MockUserRepositoryGenerateUsersDNIReportCall wrap *gomock.Call
+type MockUserRepositoryGenerateUsersDNIReportCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MockUserRepositoryGenerateUsersDNIReportCall) Return(arg0, arg1, arg2 int64, arg3 error) *MockUserRepositoryGenerateUsersDNIReportCall {
+	c.Call = c.Call.Return(arg0, arg1, arg2, arg3)
+	return c
+}
+
+// Do rewrite *gomock.Call.Do
+func (c *MockUserRepositoryGenerateUsersDNIReportCall) Do(f func(context.Context) (int64, int64, int64, error)) *MockUserRepositoryGenerateUsersDNIReportCall {
+	c.Call = c.Call.Do(f)
+	return c
+}
+
+// DoAndReturn rewrite *gomock.Call.DoAndReturn
+func (c *MockUserRepositoryGenerateUsersDNIReportCall) DoAndReturn(f func(context.Context) (int64, int64, int64, error)) *MockUserRepositoryGenerateUsersDNIReportCall {
+	c.Call = c.Call.DoAndReturn(f)
+	return c
+}
+
 // GetUser mocks base method.
 func (m *MockUserRepository) GetUser(ctx context.Context, DNI string) (*domain.User, error) {
 	m.ctrl.T.Helper()

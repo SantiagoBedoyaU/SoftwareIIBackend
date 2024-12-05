@@ -37,7 +37,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *A
 	appointmentRepo := mongodb.NewAppointmentRepository("appointments", dbconn)
 	appointmentService := service.NewAppointmentService(appointmentRepo, userService, emailService)
 	// report
-	reportService := service.NewReportService(appointmentRepo)
+	reportService := service.NewReportService(appointmentRepo, userRepo)
 	// unavailable time
 	unavailableTimeRepo := mongodb.NewUnavailableTimeRepository("unavailable_time", dbconn)
 	unavailableTimeService := service.NewUnavailableTimeService(unavailableTimeRepo, userService)
@@ -56,7 +56,7 @@ func NewApplication(config *config.Config, dbconn *mongodb.MongoDBConnection) *A
 			authService:            authService,
 			appointmentService:     appointmentService,
 			unavailableTimeService: unavailableTimeService,
-      reportService: 		      reportService,
+     		reportService: 		    reportService,
 		},
 		scheduler: scheduler,
 	}
